@@ -3,7 +3,7 @@
 
 CFLAGS = -Wall -g -c -std=c++11
 
-Chess: ChessMain.o ChessBoard.o
+Chess: ChessMain.o ChessBoard.o Piece.o EmptyPiece.o
 	g++ -Wall -g $^ -o Chess
 
 ChessMain.o: ChessMain.cpp

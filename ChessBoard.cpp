@@ -5,14 +5,19 @@
 // You may add any additonal files/methods as you see fit
 // (be sure to also include them in the makefile).
 
-#include "ChessBoard.hpp"
+#include <map>
 #include <iostream>
+#include <string>
+
+#include "Piece.hpp"
+#include "EmptyPiece.hpp"
+#include "ChessBoard.hpp"
 
 using namespace std;
 
-ChessBoard::ChessBoard()
-{
-  cout << "TODO: implement ChessBoard constructor" << endl;
+ChessBoard::ChessBoard() {
+  
+  resetBoard();
 }
 
 ChessBoard::~ChessBoard()
@@ -20,13 +25,27 @@ ChessBoard::~ChessBoard()
   cout << "TODO: implement ChessBoard deconstructor" << endl;
 }
 
-void ChessBoard::submitMove(const char* fromSquare, const char* toSquare)
-{
-   cout << "TODO: implement ChessBoard.submitMove()" << endl;
+void ChessBoard::submitMove(const char* fromSquare, const char* toSquare){
+  
+  if (board->at(string(fromSquare))->isValidMove(string(toSquare), board)) {
+  } else {
+    cout << "You idiot! This is not Valid!" << endl;
+  }
 }    
 
-void ChessBoard::resetBoard()
-{
-    cout << "TODO: implement ChessBoard.resetBoard" << endl;
+void ChessBoard::resetBoard(){
+  // apprently we need to delete recursively all the pieces within the map
+  // leave it to later stage then
+
+  board = new map<string, Piece*>;
+
+  for (char i = MIN_FILE; i <= MAX_FILE; i++) {
+    for (char j = MIN_RANK; j <= MAX_RANK; j++) {
+      string fileRank ({ i, j });
+      
+      board->insert({fileRank, new EmptyPiece(fileRank, true)});
+    }
+  }
+
 }
 
