@@ -1,14 +1,18 @@
 # Skeleton makefile for the C++ Chess exercise.
 # Make sure that you add any new files you create to this makefile.
 
+CFLAGS = -Wall -g -c -std=c++11
+
 Chess: ChessMain.o ChessBoard.o
-	g++ -Wall -g ChessMain.o ChessBoard.o -o Chess
+	g++ -Wall -g $^ -o Chess
 
-ChessMain: ChessBoard.hpp ChessMain.cpp
-	g++ -Wall -g -c ChessMain.cpp -o ChessMain.o
+ChessMain.o: ChessMain.cpp
+	g++ $(CFLAGS) $^ -o $@
 
-ChessBoard: ChessBoard.hpp ChessBoard.cpp
-	g++ -Wall -g -c ChessBoard.cpp -o ChessBoard.o
+%.o: %.hpp %.cpp
+	g++ $(CFLAGS) $(word 2,$^) -o $@
 
 clean:
 	rm -f *.o Chess
+
+.PHONY: clean
