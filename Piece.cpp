@@ -15,6 +15,11 @@ Piece::~Piece () {
 
 }
 
+string Piece::playerToString () {
+
+  return isWhitePlayer? string("White's") : string("Black's");
+}
+
 bool Piece::isSameFile (char thatFile) {
 
   return this->file == thatFile;

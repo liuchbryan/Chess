@@ -27,12 +27,16 @@ class Piece {
     
     virtual bool isValidMove 
       (string destFileRank, map<string, Piece*>* board) = 0;
-    
-//  private:
+
+    string playerToString ();
+
+    virtual string toString () = 0;
+
+  protected:
     bool isSameFile (char thatFile);
     bool isSameRank (char thatRank);
     bool isSameDiagonal (char thatFile, char thatRank);
-    
+   
 };
 
 

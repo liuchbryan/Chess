@@ -39,13 +39,51 @@ void ChessBoard::resetBoard(){
 
   board = new map<string, Piece*>;
 
+  string fileRank({ 'A', '1' });
+
   for (char i = MIN_FILE; i <= MAX_FILE; i++) {
-    for (char j = MIN_RANK; j <= MAX_RANK; j++) {
-      string fileRank ({ i, j });
-      
-      board->insert({fileRank, new EmptyPiece(fileRank, true)});
+    fileRank.front() = i;
+
+    fileRank.back() = WHITE_INIT_PAWN_RANK;
+    board->insert ({fileRank, new Pawn (fileRank, true)});
+
+    for (char j = MIN_INIT_EMPTY_RANK; j <= MAX_INIT_EMPTY_RANK; j++) {
+      fileRank.back() = j;
+      board->insert ({fileRank, new EmptyPiece (fileRank, true)});
     }
+
+    fileRank.back() = BLACK_INIT_PAWN_RANK;
+    board->insert ({fileRank, new Pawn (fileRank, false)});
   }
+
+  board->insert ({string("A1"), new Rook (string("A1"), true)});
+  board->insert ({string("B1"), new Knight (string("B1"), true)});
+  board->insert ({string("C1"), new Bishop (string("C1"), true)});
+  board->insert ({string("D1"), new Queen (string("D1"), true)});
+  board->insert ({string("E1"), new King (string("E1"), true)});
+  board->insert ({string("F1"), new Bishop (string("F1"), true)});
+  board->insert ({string("G1"), new Knight (string("G1"), true)});
+  board->insert ({string("H1"), new Rook (string("H1"), true)});
+
+  board->insert ({string("A8"), new Rook (string("A8"), false)});
+  board->insert ({string("B8"), new Knight (string("B8"), false)});
+  board->insert ({string("C8"), new Bishop (string("C8"), false)});
+  board->insert ({string("D8"), new Queen (string("D8"), false)});
+  board->insert ({string("E8"), new King (string("E8"), false)});
+  board->insert ({string("F8"), new Bishop (string("F8"), false)});
+  board->insert ({string("G8"), new Knight (string("G8"), false)});
+  board->insert ({string("H8"), new Rook (string("H8"), false)});
+
+/* 
+// testing (printing) the state of the chessboard
+  cout << "Total Number of Squares: " << board->size() << endl;
+  for (map<string, Piece*>::iterator it = board->begin();
+       it != board->end(); ++it) {
+    cout << "Square " << it->first << " contains " << it->second->toString() << endl;
+  }
+// end of testing (printing) the state of chessboard
+*/
+
 }
 
 bool ChessBoard::isWhiteTurn(){
@@ -62,4 +100,3 @@ bool ChessBoard::withinChessBoard(string destFileRank) {
   return MIN_FILE <= destFile && destFile <= MAX_FILE &&
          MIN_RANK <= destRank && destRank <= MAX_RANK;
 }
-

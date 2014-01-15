@@ -11,8 +11,9 @@ using namespace std;
 class EmptyPiece : public Piece {
 
   public:
-    EmptyPiece(string fileRank, bool owningPlayer);
+    EmptyPiece (string fileRank, bool isWhitePlayer);
     bool isValidMove (string destFileRank, map<string, Piece*>* board);
+    string toString ();
 
   private:
 
