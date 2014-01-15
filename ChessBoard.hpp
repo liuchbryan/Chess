@@ -9,12 +9,21 @@
 #ifndef CHESSBOARD_H
 #define CHESSBOARD_H
 
+#include <map>
+#include <iostream>
+#include <string>
+
+#include "Piece.hpp"
+#include "EmptyPiece.hpp"
+
 using namespace std;
 
 class ChessBoard {
 
   private:
     const int ZERO = 0;
+    const int FILE_INDEX = 0;
+    const int RANK_INDEX = 1;
 
     const char MIN_FILE = 'A';
     const char MAX_FILE = 'H';
@@ -26,7 +35,7 @@ class ChessBoard {
     const char WHITE_INIT_PAWN_RANK = '8';
 
     map<string, Piece*>* board;
-    bool turn = true;
+    bool _isWhiteTurn = true;
 
   public:
     ChessBoard();
@@ -37,9 +46,10 @@ class ChessBoard {
     void submitMove(const char* fromSquare, const char* toSquare);
 
   private:
-    void someSubMethod();
+    bool isWhiteTurn ();
+    bool isBlackTurn ();
 
-
+    bool withinChessBoard (string destFileRank);
 
 };
 

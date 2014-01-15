@@ -1,7 +1,4 @@
-#include <map>
-#include <string>
 
-#include "Piece.hpp"
 #include "EmptyPiece.hpp"
 
 EmptyPiece::EmptyPiece(string fileRank, bool owningPlayer) 

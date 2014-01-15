@@ -3,6 +3,9 @@
 #ifndef PIECES_H
 #define PIECES_H
 
+#include <map>
+#include <string>
+
 using namespace std;
 
 class Piece {
@@ -16,16 +19,19 @@ class Piece {
 
     char file;
     char rank;
-    bool owningPlayer;
+    bool isWhitePlayer;
 
   public:
-    Piece (string fileRank, bool owningPlayer);
+    Piece (string fileRank, bool isWhitePlayer);
     ~Piece ();
     
     virtual bool isValidMove 
       (string destFileRank, map<string, Piece*>* board) = 0;
     
-  private:
+//  private:
+    bool isSameFile (char thatFile);
+    bool isSameRank (char thatRank);
+    bool isSameDiagonal (char thatFile, char thatRank);
     
 };
 

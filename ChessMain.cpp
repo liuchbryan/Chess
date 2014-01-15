@@ -3,11 +3,9 @@
 
 // Note: this file will be replaced during the automated testing.
 #include <iostream>
-#include <map>
 
 using namespace std;
 
-#include "Piece.hpp"
 #include "ChessBoard.hpp"
 
 int main() {

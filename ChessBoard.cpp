@@ -5,12 +5,6 @@
 // You may add any additonal files/methods as you see fit
 // (be sure to also include them in the makefile).
 
-#include <map>
-#include <iostream>
-#include <string>
-
-#include "Piece.hpp"
-#include "EmptyPiece.hpp"
 #include "ChessBoard.hpp"
 
 using namespace std;
@@ -26,8 +20,14 @@ ChessBoard::~ChessBoard()
 }
 
 void ChessBoard::submitMove(const char* fromSquare, const char* toSquare){
-  
-  if (board->at(string(fromSquare))->isValidMove(string(toSquare), board)) {
+  string initFileRank (fromSquare);
+  string destFileRank (toSquare);
+
+  if (initFileRank.compare(destFileRank) == 0) {
+    cout << "Invalid move: destination is the same as the source" << endl;
+    return;
+  }
+  if (board->at(initFileRank)->isValidMove(destFileRank, board)) {
   } else {
     cout << "You idiot! This is not Valid!" << endl;
   }
@@ -46,6 +46,20 @@ void ChessBoard::resetBoard(){
       board->insert({fileRank, new EmptyPiece(fileRank, true)});
     }
   }
+}
 
+bool ChessBoard::isWhiteTurn(){
+  return _isWhiteTurn;
+}
+
+bool ChessBoard::isBlackTurn(){
+  return !(_isWhiteTurn);
+}
+
+bool ChessBoard::withinChessBoard(string destFileRank) {
+  char destFile = destFileRank.at(FILE_INDEX);
+  char destRank = destFileRank.at(RANK_INDEX);
+  return MIN_FILE <= destFile && destFile <= MAX_FILE &&
+         MIN_RANK <= destRank && destRank <= MAX_RANK;
 }
 
