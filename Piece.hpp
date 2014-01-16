@@ -6,18 +6,15 @@
 #include <map>
 #include <string>
 #include <cmath>
+#include <stdexcept>
+
+#include "ChessInfo.hpp"
 
 using namespace std;
 
 class Piece {
 
-  private:
-    const int ZERO = 0;
-    const char MIN_FILE = 'A';
-    const char MAX_FILE = 'H';
-    const char MIN_RANK = '1';
-    const char MAX_RANK = '8';
-
+  protected:
     char file;
     char rank;
     bool _isWhitePlayer;
@@ -27,6 +24,7 @@ class Piece {
     ~Piece ();
 
     bool isWhitePlayer ();
+    bool isFriendly (Piece* that);
     
     virtual int isValidMove 
       (string destFileRank, map<string, Piece*>* board) = 0;

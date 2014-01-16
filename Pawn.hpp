@@ -9,7 +9,7 @@
 class Pawn : public Piece {
 
   private:
-
+    bool isFirstMove = true;
 
   public:
     Pawn (string fileRank, bool isWhitePlayer);
@@ -17,6 +17,7 @@ class Pawn : public Piece {
     string toString ();
   
   private:
+    bool canDiagonallyCapture ();
 
 };
 

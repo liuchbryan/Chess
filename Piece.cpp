@@ -5,8 +5,8 @@
 #include "Piece.hpp"
 
 Piece::Piece (string fileRank, bool isWhitePlayer){
-  file = fileRank[0];
-  rank = fileRank[1];
+  file = fileRank.at(ChessInfo::FILE_INDEX);
+  rank = fileRank.at(ChessInfo::RANK_INDEX);
   _isWhitePlayer = isWhitePlayer;
 }
 
@@ -17,6 +17,10 @@ Piece::~Piece () {
 
 bool Piece::isWhitePlayer () {
   return (_isWhitePlayer);
+}
+
+bool Piece::isFriendly (Piece* that) {
+  return this->isWhitePlayer() == that->isWhitePlayer();
 }
 
 string Piece::playerToString () {

@@ -15,6 +15,8 @@
 #include <stdexcept>
 
 #include "ChessErrHandler.hpp"
+#include "ChessInfo.hpp"
+
 #include "Piece.hpp"
 #include "EmptyPiece.hpp"
 #include "King.hpp"
@@ -29,20 +31,6 @@ using namespace std;
 class ChessBoard {
 
   private:
-    const int ZERO = 0;
-    const int FILE_INDEX = 0;
-    const int RANK_INDEX = 1;
-
-    const char MIN_FILE = 'A';
-    const char MAX_FILE = 'H';
-
-    const char MIN_RANK = '1';
-    const char WHITE_INIT_PAWN_RANK = '2';
-    const char MIN_INIT_EMPTY_RANK = '3';
-    const char MAX_INIT_EMPTY_RANK = '6';
-    const char BLACK_INIT_PAWN_RANK = '7';
-    const char MAX_RANK = '8';
-
     map<string, Piece*>* board;
     ChessErrHandler* errorHandler;
 

@@ -47,13 +47,13 @@ void ChessBoard::resetBoard(){
   
   string fileRank({ 'A', '1' });
 
-  for (char i = MIN_FILE; i <= MAX_FILE; i++) {
+  for (char i = ChessInfo::MIN_FILE; i <= ChessInfo::MAX_FILE; i++) {
     fileRank.front() = i;
 
-    fileRank.back() = WHITE_INIT_PAWN_RANK;
+    fileRank.back() = ChessInfo::WHITE_INIT_PAWN_RANK;
     board->insert ({fileRank, new Pawn (fileRank, true)});
 
-    fileRank.back() = BLACK_INIT_PAWN_RANK;
+    fileRank.back() = ChessInfo::BLACK_INIT_PAWN_RANK;
     board->insert ({fileRank, new Pawn (fileRank, false)});
   }
 
@@ -94,21 +94,21 @@ bool ChessBoard::sourceAndDestIsValid
 
   if (sourceFileRank.compare(destFileRank) == 0) {
     errorHandler->printErr(ChessErrHandler::DEST_EQ_SOURCE,
-                           new EmptyPiece("", true),
+                           new EmptyPiece("  ", true),
                            sourceFileRank, destFileRank); 
     return false;
   }
 
   if (!withinChessBoard(sourceFileRank)) {
     errorHandler->printErr(ChessErrHandler::SOURCE_OUTOF_BOUND,
-                           new EmptyPiece("", true),
+                           new EmptyPiece("  ", true),
                            sourceFileRank, destFileRank);
     return false;
   }
 
   if (!withinChessBoard(sourceFileRank)) {
     errorHandler->printErr(ChessErrHandler::DEST_OUTOF_BOUND,
-                           new EmptyPiece("", true),
+                           new EmptyPiece("  ", true),
                            sourceFileRank, destFileRank);
     return false;
   }
@@ -119,10 +119,10 @@ bool ChessBoard::sourceAndDestIsValid
 
 bool ChessBoard::withinChessBoard (string fileRank) {
   
-  char file = fileRank.at(FILE_INDEX);
-  char rank = fileRank.at(RANK_INDEX);
-  return MIN_FILE <= file && file <= MAX_FILE &&
-         MIN_RANK <= rank && rank <= MAX_RANK;
+  char file = fileRank.at(ChessInfo::FILE_INDEX);
+  char rank = fileRank.at(ChessInfo::RANK_INDEX);
+  return ChessInfo::MIN_FILE <= file && file <= ChessInfo::MAX_FILE &&
+         ChessInfo::MIN_RANK <= rank && rank <= ChessInfo::MAX_RANK;
 }
 
 bool ChessBoard::sourceIsNotEmpty (string sourceFileRank) {
@@ -131,7 +131,7 @@ bool ChessBoard::sourceIsNotEmpty (string sourceFileRank) {
     board->at (sourceFileRank);
   } catch (const std::out_of_range &err) {
     errorHandler->printErr(ChessErrHandler::MOVED_EMPTY_PIECE,
-                           new EmptyPiece("", true), sourceFileRank, ""); 
+                           new EmptyPiece("  ", true), sourceFileRank, "  "); 
     return false;
   }
   return true;
@@ -141,7 +141,7 @@ bool ChessBoard::isCurrentPlayerPiece (Piece* piece) {
 
   bool currentPlayerPiece = isWhiteTurn == piece->isWhitePlayer();
   if (!currentPlayerPiece) {
-    errorHandler->printErr(ChessErrHandler::NOT_OWNER_TURN, piece, "", ""); 
+    errorHandler->printErr(ChessErrHandler::NOT_OWNER_TURN, piece, "  ", "  "); 
   }
   return currentPlayerPiece;
 }
