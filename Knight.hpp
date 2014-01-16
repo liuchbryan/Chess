@@ -13,7 +13,7 @@ class Knight : public Piece {
 
   public:
     Knight (string fileRank, bool isWhitePlayer);
-    bool isValidMove (string destFileRank, map<string, Piece*>* board);
+    int isValidMove (string destFileRank, map<string, Piece*>* board);
     string toString ();
   
   private:

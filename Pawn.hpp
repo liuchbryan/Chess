@@ -13,7 +13,7 @@ class Pawn : public Piece {
 
   public:
     Pawn (string fileRank, bool isWhitePlayer);
-    bool isValidMove (string destFileRank, map<string, Piece*>* board);
+    int isValidMove (string destFileRank, map<string, Piece*>* board);
     string toString ();
   
   private:

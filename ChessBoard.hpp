@@ -12,7 +12,9 @@
 #include <map>
 #include <iostream>
 #include <string>
+#include <stdexcept>
 
+#include "ChessErrHandler.hpp"
 #include "Piece.hpp"
 #include "EmptyPiece.hpp"
 #include "King.hpp"
@@ -42,8 +44,9 @@ class ChessBoard {
     const char MAX_RANK = '8';
 
     map<string, Piece*>* board;
+    ChessErrHandler* errorHandler;
 
-    bool _isWhiteTurn = true;
+    bool isWhiteTurn = true;
     bool isInCheck = false;
 
   public:
@@ -55,12 +58,11 @@ class ChessBoard {
     void submitMove(const char* fromSquare, const char* toSquare);
 
   private:
-    bool isWhiteTurn ();
-    bool isBlackTurn ();
-
+    bool checkSourceAndDestValid (string sourceFileRank, string destFileRank);
     bool withinChessBoard (string destFileRank);
 
-
+    bool checkSourceIsNotEmpty (string fileRank);
+    bool checkIsCurrentPlayerPiece (Piece* piece);
 
 };
 

@@ -4,10 +4,10 @@
 
 #include "Piece.hpp"
 
-Piece::Piece (string fileRank, bool _isWhitePlayer){
+Piece::Piece (string fileRank, bool isWhitePlayer){
   file = fileRank[0];
   rank = fileRank[1];
-  isWhitePlayer = _isWhitePlayer;
+  _isWhitePlayer = isWhitePlayer;
 }
 
 Piece::~Piece () {
@@ -15,23 +15,22 @@ Piece::~Piece () {
 
 }
 
-string Piece::playerToString () {
+bool Piece::isWhitePlayer () {
+  return (_isWhitePlayer);
+}
 
-  return isWhitePlayer? string("White's") : string("Black's");
+string Piece::playerToString () {
+  return _isWhitePlayer? string("White's") : string("Black's");
 }
 
 bool Piece::isSameFile (char thatFile) {
-
   return this->file == thatFile;
 }
 
 bool Piece::isSameRank (char thatRank) {
-
   return this->rank == thatRank;
 }
 
 bool Piece::isSameDiagonal (char thatFile, char thatRank) {
-
-  return (this->file - thatFile == this->rank - thatRank) ||
-         (this->file - thatFile == -(this->rank - thatRank));
+  return (abs(this->file - thatFile) == abs(this->rank - thatRank));
 }

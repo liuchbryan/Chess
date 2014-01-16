@@ -6,9 +6,9 @@ Pawn::Pawn (string fileRank, bool isWhitePlayer)
 
 }
 
-bool Pawn::isValidMove (string destFileRank, map<string, Piece*>* board) {
+int Pawn::isValidMove (string destFileRank, map<string, Piece*>* board) {
   
-  return false;
+  return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
 }
 
 string Pawn::toString () {

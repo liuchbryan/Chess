@@ -13,7 +13,7 @@ class Rook : public Piece {
 
   public:
     Rook (string fileRank, bool isWhitePlayer);
-    bool isValidMove (string destFileRank, map<string, Piece*>* board);
+    int isValidMove (string destFileRank, map<string, Piece*>* board);
     string toString ();
   
   private:

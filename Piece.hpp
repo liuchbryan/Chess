@@ -5,6 +5,7 @@
 
 #include <map>
 #include <string>
+#include <cmath>
 
 using namespace std;
 
@@ -19,13 +20,15 @@ class Piece {
 
     char file;
     char rank;
-    bool isWhitePlayer;
+    bool _isWhitePlayer;
 
   public:
     Piece (string fileRank, bool isWhitePlayer);
     ~Piece ();
+
+    bool isWhitePlayer ();
     
-    virtual bool isValidMove 
+    virtual int isValidMove 
       (string destFileRank, map<string, Piece*>* board) = 0;
 
     string playerToString ();
@@ -39,5 +42,6 @@ class Piece {
    
 };
 
+#include "ChessErrHandler.hpp"
 
 #endif

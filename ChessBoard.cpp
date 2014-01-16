@@ -10,7 +10,7 @@
 using namespace std;
 
 ChessBoard::ChessBoard() {
-  
+  errorHandler = new ChessErrHandler();
   resetBoard();
 }
 
@@ -20,17 +20,16 @@ ChessBoard::~ChessBoard()
 }
 
 void ChessBoard::submitMove(const char* fromSquare, const char* toSquare){
-  string initFileRank (fromSquare);
+  string sourceFileRank (fromSquare);
   string destFileRank (toSquare);
 
-  if (initFileRank.compare(destFileRank) == 0) {
-    cout << "Invalid move: destination is the same as the source" << endl;
-    return;
-  }
-  if (board->at(initFileRank)->isValidMove(destFileRank, board)) {
-  } else {
-    cout << "You idiot! This is not Valid!" << endl;
-  }
+  if (!checkSourceAndDestValid (sourceFileRank, destFileRank)) return;
+  if (!checkSourceIsNotEmpty (sourceFileRank)) return;
+
+  Piece* piece = board->at(sourceFileRank);
+  if (!checkIsCurrentPlayerPiece (piece)) return;
+
+
 }    
 
 void ChessBoard::resetBoard(){
@@ -38,7 +37,7 @@ void ChessBoard::resetBoard(){
   // leave it to later stage then
 
   board = new map<string, Piece*>;
-
+  
   string fileRank({ 'A', '1' });
 
   for (char i = MIN_FILE; i <= MAX_FILE; i++) {
@@ -46,11 +45,6 @@ void ChessBoard::resetBoard(){
 
     fileRank.back() = WHITE_INIT_PAWN_RANK;
     board->insert ({fileRank, new Pawn (fileRank, true)});
-
-    for (char j = MIN_INIT_EMPTY_RANK; j <= MAX_INIT_EMPTY_RANK; j++) {
-      fileRank.back() = j;
-      board->insert ({fileRank, new EmptyPiece (fileRank, true)});
-    }
 
     fileRank.back() = BLACK_INIT_PAWN_RANK;
     board->insert ({fileRank, new Pawn (fileRank, false)});
@@ -74,6 +68,8 @@ void ChessBoard::resetBoard(){
   board->insert ({string("G8"), new Knight (string("G8"), false)});
   board->insert ({string("H8"), new Rook (string("H8"), false)});
 
+  cout << "Let the game begin..." << endl;
+
 /* 
 // testing (printing) the state of the chessboard
   cout << "Total Number of Squares: " << board->size() << endl;
@@ -86,17 +82,59 @@ void ChessBoard::resetBoard(){
 
 }
 
-bool ChessBoard::isWhiteTurn(){
-  return _isWhiteTurn;
+bool ChessBoard::checkSourceAndDestValid 
+  (string sourceFileRank, string destFileRank) {
+
+  if (sourceFileRank.compare(destFileRank) == 0) {
+    errorHandler->printErr(ChessErrHandler::DEST_EQ_SOURCE,
+                           new EmptyPiece("", true),
+                           sourceFileRank, destFileRank); 
+    return false;
+  }
+
+  if (!withinChessBoard(sourceFileRank)) {
+    errorHandler->printErr(ChessErrHandler::SOURCE_OUTOF_BOUND,
+                           new EmptyPiece("", true),
+                           sourceFileRank, destFileRank);
+    return false;
+  }
+
+  if (!withinChessBoard(sourceFileRank)) {
+    errorHandler->printErr(ChessErrHandler::DEST_OUTOF_BOUND,
+                           new EmptyPiece("", true),
+                           sourceFileRank, destFileRank);
+    return false;
+  }
+
+  return true;
 }
 
-bool ChessBoard::isBlackTurn(){
-  return !(_isWhiteTurn);
+
+bool ChessBoard::withinChessBoard (string fileRank) {
+  
+  char file = fileRank.at(FILE_INDEX);
+  char rank = fileRank.at(RANK_INDEX);
+  return MIN_FILE <= file && file <= MAX_FILE &&
+         MIN_RANK <= rank && rank <= MAX_RANK;
 }
 
-bool ChessBoard::withinChessBoard(string destFileRank) {
-  char destFile = destFileRank.at(FILE_INDEX);
-  char destRank = destFileRank.at(RANK_INDEX);
-  return MIN_FILE <= destFile && destFile <= MAX_FILE &&
-         MIN_RANK <= destRank && destRank <= MAX_RANK;
+bool ChessBoard::checkSourceIsNotEmpty (string sourceFileRank) {
+
+  try {
+    board->at (sourceFileRank);
+  } catch (const std::out_of_range &err) {
+    errorHandler->printErr(ChessErrHandler::MOVED_EMPTY_PIECE,
+                           new EmptyPiece("", true), sourceFileRank, ""); 
+    return false;
+  }
+  return true;
+}
+
+bool ChessBoard::checkIsCurrentPlayerPiece (Piece* piece) {
+
+  bool currentPlayerPiece = isWhiteTurn == piece->isWhitePlayer();
+  if (!currentPlayerPiece) {
+    errorHandler->printErr(ChessErrHandler::NOT_OWNER_TURN, piece, "", ""); 
+  }
+  return currentPlayerPiece;
 }

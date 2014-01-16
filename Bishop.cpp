@@ -6,9 +6,9 @@ Bishop::Bishop (string fileRank, bool isWhitePlayer)
 
 }
 
-bool Bishop::isValidMove (string destFileRank, map<string, Piece*>* board) {
+int Bishop::isValidMove (string destFileRank, map<string, Piece*>* board) {
   
-  return false;
+  return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
 }
 
 string Bishop::toString () {

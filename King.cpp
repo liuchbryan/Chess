@@ -6,9 +6,9 @@ King::King (string fileRank, bool isWhitePlayer)
 
 }
 
-bool King::isValidMove (string destFileRank, map<string, Piece*>* board) {
+int King::isValidMove (string destFileRank, map<string, Piece*>* board) {
   
-  return false;
+  return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
 }
 
 string King::toString () {

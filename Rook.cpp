@@ -6,9 +6,9 @@ Rook::Rook (string fileRank, bool isWhitePlayer)
 
 }
 
-bool Rook::isValidMove (string destFileRank, map<string, Piece*>* board) {
+int Rook::isValidMove (string destFileRank, map<string, Piece*>* board) {
   
-  return false;
+  return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
 }
 
 string Rook::toString () {
