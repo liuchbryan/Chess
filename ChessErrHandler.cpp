@@ -11,40 +11,43 @@ void ChessErrHandler::printErr
   switch (errNo) {
     case ChessErrHandler::DEST_EQ_SOURCE : {
       cout << "Skipping your move by moving a piece to its original position? "
-           << "Cunning...";
+           << "Cunning..." << endl;
       break;
     }
     case ChessErrHandler::SOURCE_OUTOF_BOUND : {
-      cout << "You cannot move a piece which is not even on the board!";
+      cout << "You cannot move pieces which are not on the board!" << endl;
       break;
     }
     case ChessErrHandler::DEST_OUTOF_BOUND : {
-      cout << "You cannot move a piece away from the board!";
+      cout << "You cannot move the piece away from the board!" << endl;
       break;
     }
     case ChessErrHandler::NOT_OWNER_TURN : {
-      cout << "It is not " << piece->playerToString() << " turn to move!";
+      cout << "It is not " << piece->playerToString () 
+           << " turn to move!" << endl;
       break;
     }
     case ChessErrHandler::MOVED_EMPTY_PIECE : {
-      cout << "There is nothing to move at " << sourceFileRank << "!";
+      cout << "There is nothing to move"
+           << " at " << sourceFileRank << "!" << endl;
       break;
     }
     case ChessErrHandler::ILLEGAL_MOVE_PATTERN : {
-      cout << "Illegal move for " << piece->toString() << ": "
-           << "You cannot move it like that!";
+      cout << "Illegal move for " << piece->toString() 
+           << " at " << sourceFileRank << ": "
+           << "You cannot move it like that!" << endl;
       break;
     }
     case ChessErrHandler::OBSTRUCTION_EN_ROUTE : {
-      cout << "Illegal move for " << piece->toString() << ": "
-           << "There is obstruction between " << sourceFileRank
-           << " and " << destFileRank;
+      cout << "Illegal move for " << piece->toString()
+           << " at " << sourceFileRank << ": Obstruction while moving"
+           << " to " << destFileRank << endl;
       break;
     }
     case ChessErrHandler::FRIENDLY_AT_DEST : {
-      cout << "Illegal move for " << piece->toString() << ": "
-           << "You cannot force your friendlies at " << destFileRank
-           << " out of their way!";
+      cout << "Illegal move for " << piece->toString()
+           << " at " << sourceFileRank << ": You cannot force your friendlies"
+           << " at " << destFileRank << " out of their way!" << endl;
       break;
     }
   }

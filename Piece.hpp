@@ -32,7 +32,6 @@ class Piece {
       (string destFileRank, map<string, Piece*>* board) = 0;
 
     string playerToString ();
-
     virtual string toString () = 0;
 
   protected:

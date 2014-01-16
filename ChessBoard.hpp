@@ -58,11 +58,15 @@ class ChessBoard {
     void submitMove(const char* fromSquare, const char* toSquare);
 
   private:
-    bool checkSourceAndDestValid (string sourceFileRank, string destFileRank);
+    bool sourceAndDestIsValid (string sourceFileRank, string destFileRank);
     bool withinChessBoard (string destFileRank);
 
-    bool checkSourceIsNotEmpty (string fileRank);
-    bool checkIsCurrentPlayerPiece (Piece* piece);
+    bool sourceIsNotEmpty (string fileRank);
+    bool isCurrentPlayerPiece (Piece* piece);
+    void handleInvalidMove (int returnCode, Piece* piece, 
+                            string sourceFileRank, string destFileRank);
+
+    void switchPlayers ();
 
 };
 

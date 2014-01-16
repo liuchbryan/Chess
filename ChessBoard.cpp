@@ -23,13 +23,20 @@ void ChessBoard::submitMove(const char* fromSquare, const char* toSquare){
   string sourceFileRank (fromSquare);
   string destFileRank (toSquare);
 
-  if (!checkSourceAndDestValid (sourceFileRank, destFileRank)) return;
-  if (!checkSourceIsNotEmpty (sourceFileRank)) return;
+  if (!sourceAndDestIsValid (sourceFileRank, destFileRank)) return;
+  if (!sourceIsNotEmpty (sourceFileRank)) return;
 
   Piece* piece = board->at(sourceFileRank);
-  if (!checkIsCurrentPlayerPiece (piece)) return;
+  if (!isCurrentPlayerPiece (piece)) return;
+
+  int returnCode = piece->isValidMove (destFileRank, board);
+  if (returnCode != ChessErrHandler::NO_ERROR) {
+    handleInvalidMove (returnCode, piece, sourceFileRank, destFileRank);
+    return;
+  }
 
 
+  switchPlayers();
 }    
 
 void ChessBoard::resetBoard(){
@@ -82,7 +89,7 @@ void ChessBoard::resetBoard(){
 
 }
 
-bool ChessBoard::checkSourceAndDestValid 
+bool ChessBoard::sourceAndDestIsValid 
   (string sourceFileRank, string destFileRank) {
 
   if (sourceFileRank.compare(destFileRank) == 0) {
@@ -118,7 +125,7 @@ bool ChessBoard::withinChessBoard (string fileRank) {
          MIN_RANK <= rank && rank <= MAX_RANK;
 }
 
-bool ChessBoard::checkSourceIsNotEmpty (string sourceFileRank) {
+bool ChessBoard::sourceIsNotEmpty (string sourceFileRank) {
 
   try {
     board->at (sourceFileRank);
@@ -130,11 +137,21 @@ bool ChessBoard::checkSourceIsNotEmpty (string sourceFileRank) {
   return true;
 }
 
-bool ChessBoard::checkIsCurrentPlayerPiece (Piece* piece) {
+bool ChessBoard::isCurrentPlayerPiece (Piece* piece) {
 
   bool currentPlayerPiece = isWhiteTurn == piece->isWhitePlayer();
   if (!currentPlayerPiece) {
     errorHandler->printErr(ChessErrHandler::NOT_OWNER_TURN, piece, "", ""); 
   }
   return currentPlayerPiece;
+}
+
+void ChessBoard::handleInvalidMove 
+  (int returnCode, Piece* piece, string sourceFileRank, string destFileRank) {
+
+  errorHandler->printErr(returnCode, piece, sourceFileRank, destFileRank);
+}
+
+void ChessBoard::switchPlayers() {
+  isWhiteTurn = !(isWhiteTurn);
 }

@@ -9,7 +9,7 @@
 class ChessErrHandler {
 
   public:   
-    static const int NO_ERR = 0;
+    static const int NO_ERROR = 0;
     static const int DEST_EQ_SOURCE = 10;
     static const int SOURCE_OUTOF_BOUND = 11;
     static const int DEST_OUTOF_BOUND = 12;
