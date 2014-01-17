@@ -24,8 +24,7 @@ class Piece {
     ~Piece ();
 
     bool isWhitePlayer ();
-    bool isFriendly (Piece* that);
-    
+        
     virtual int isValidMove 
       (string destFileRank, map<string, Piece*>* board) = 0;
 
@@ -33,10 +32,17 @@ class Piece {
     virtual string toString () = 0;
 
   protected:
-    bool isSameFile (char thatFile);
-    bool isSameRank (char thatRank);
-    bool isSameDiagonal (char thatFile, char thatRank);
-   
+    bool isFriendly (Piece* that);
+
+    bool isSameFile (string thatFileRank);
+    bool isSameRank (string thatFileRank);
+    bool isSameDiagonal (string thatFileRank);
+
+    bool noObstructionInBetween
+      (string destFileRank, map<string, Piece*>* board);
+    
+    bool destExistFriendlyPiece 
+      (string destFileRank, map<string, Piece*>* board);   
 };
 
 #include "ChessErrHandler.hpp"

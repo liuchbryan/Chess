@@ -7,24 +7,14 @@ Knight::Knight (string fileRank, bool isWhitePlayer)
 }
 
 int Knight::isValidMove (string destFileRank, map<string, Piece*>* board) {
-  char destFile = destFileRank.at(ChessInfo::FILE_INDEX);
-  char destRank = destFileRank.at(ChessInfo::RANK_INDEX);
-
-  if (abs(file-destFile) * abs(rank-destRank) != 2) {
+  if (!movesInLShape(destFileRank)) {
     return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
   }
 
-
-// Involve refactoring
-  try {
-    Piece* destPiece = board->at(destFileRank);
-    if (isFriendly(destPiece)) {
-      return ChessErrHandler::FRIENDLY_AT_DEST;
-    }
-  } catch (const std::out_of_range &err) {
-     
+  if (destExistFriendlyPiece (destFileRank, board)) {
+    return ChessErrHandler::FRIENDLY_AT_DEST;
   }
-  
+
   return ChessErrHandler::NO_ERROR;
 }
 
@@ -33,4 +23,11 @@ string Knight::toString () {
   string name (playerToString());
   name.append(" Knight");
   return name;  
+}
+
+bool Knight::movesInLShape (string destFileRank) {
+  char destFile = destFileRank.at(ChessInfo::FILE_INDEX);
+  char destRank = destFileRank.at(ChessInfo::RANK_INDEX);
+
+  return abs(file-destFile) * abs(rank-destRank) == 2;
 }

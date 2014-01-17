@@ -17,7 +17,7 @@ class Knight : public Piece {
     string toString ();
   
   private:
-
+    bool movesInLShape (string destFileRank);
 };
 
 #endif

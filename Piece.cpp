@@ -27,14 +27,41 @@ string Piece::playerToString () {
   return _isWhitePlayer? string("White's") : string("Black's");
 }
 
-bool Piece::isSameFile (char thatFile) {
+bool Piece::isSameFile (string thatFileRank) {
+
+  char thatFile = thatFileRank.at(ChessInfo::FILE_INDEX);
   return this->file == thatFile;
 }
 
-bool Piece::isSameRank (char thatRank) {
+bool Piece::isSameRank (string thatFileRank) {
+
+  char thatRank = thatFileRank.at(ChessInfo::RANK_INDEX);
   return this->rank == thatRank;
 }
 
-bool Piece::isSameDiagonal (char thatFile, char thatRank) {
+bool Piece::isSameDiagonal (string thatFileRank) {
+
+  char thatFile = thatFileRank.at(ChessInfo::FILE_INDEX);
+  char thatRank = thatFileRank.at(ChessInfo::RANK_INDEX);
   return (abs(this->file - thatFile) == abs(this->rank - thatRank));
+}
+
+bool Piece::noObstructionInBetween
+  (string destFileRank, map<string, Piece*>* board){
+// yes require expansion
+  return false;
+}
+
+bool Piece::destExistFriendlyPiece 
+  (string destFileRank, map<string, Piece*>* board) {
+
+  try {
+    Piece* destPiece = board->at(destFileRank);
+    if (isFriendly(destPiece)) {
+      return true;
+    }
+  } catch (const std::out_of_range &err) {
+    
+  }
+  return false;
 }

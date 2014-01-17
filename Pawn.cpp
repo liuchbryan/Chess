@@ -15,9 +15,8 @@ int Pawn::isValidMove (string destFileRank, map<string, Piece*>* board) {
 
   switch (rankAdvancement) {
     case 2: {
-      if (isSameFile(destFile) && isFirstMove) {
-        isFirstMove = !(isFirstMove);
-        // Involve refactoring
+      if (!(isSameFile(destFileRank) && isFirstMove)) {
+         return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
       }
     }
     case 1: {
@@ -31,13 +30,15 @@ int Pawn::isValidMove (string destFileRank, map<string, Piece*>* board) {
 
   }
 
-  if (isSameFile (destFile)) {
+  if (isSameFile (destFileRank)) {
     
 
   } else {
     
   
   }
+
+  isFirstMove = false;
   
   return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
 }
@@ -52,5 +53,5 @@ string Pawn::toString () {
 bool Pawn::canDiagonallyCapture () {
 
 
-
+  return false;
 }
