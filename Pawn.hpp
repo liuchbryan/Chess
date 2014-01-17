@@ -17,7 +17,9 @@ class Pawn : public Piece {
     string toString ();
   
   private:
-    bool canDiagonallyCapture ();
+    bool canDiagonallyCapture 
+      (string destFileRank, map<string, Piece*>* board);
+    bool isAdjacentFile (string thatFileRank);
 
 };
 

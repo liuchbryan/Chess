@@ -46,8 +46,7 @@ bool Piece::isSameDiagonal (string thatFileRank) {
   return (abs(this->file - thatFile) == abs(this->rank - thatRank));
 }
 
-bool Piece::noObstructionInBetween
-  (string destFileRank, map<string, Piece*>* board){
+bool Piece::noObstruction (string destFileRank, map<string, Piece*>* board) {
 // yes require expansion
   return false;
 }

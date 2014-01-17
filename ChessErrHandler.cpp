@@ -50,6 +50,11 @@ void ChessErrHandler::printErr
            << " at " << destFileRank << " out of their way!" << endl;
       break;
     }
+    case ChessErrHandler::PAWN_ILLEGAL_CAPTURE_PATTERN : {
+      cout << "Illegal move for " << piece->toString()
+           << " at " << sourceFileRank << ": You cannot capture piece"
+           << "directly ahead!" << endl;
+    }
   }
 
 }

@@ -18,6 +18,7 @@ class ChessErrHandler {
     static const int ILLEGAL_MOVE_PATTERN = 40;
     static const int OBSTRUCTION_EN_ROUTE = 41;
     static const int FRIENDLY_AT_DEST = 42;
+    static const int PAWN_ILLEGAL_CAPTURE_PATTERN = 43;
 
   public:
     ChessErrHandler ();
