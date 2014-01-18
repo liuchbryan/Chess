@@ -16,6 +16,8 @@ class ChessInfo {
     static const char WHITE_INIT_PAWN_RANK = '2';
     static const char BLACK_INIT_PAWN_RANK = '7';
     static const char MAX_RANK = '8';
+
+    static const int EXCLUSIVE_SHIFT = 1;
 };
 
 #endif

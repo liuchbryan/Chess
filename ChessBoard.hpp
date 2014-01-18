@@ -54,6 +54,12 @@ class ChessBoard {
     void handleInvalidMove (int returnCode, Piece* piece, 
                             string sourceFileRank, string destFileRank);
 
+    void handleMove (Piece* piece, string sourceFileRank, 
+      string destFileRank, map<string, Piece*>* board);
+    void printMove (Piece* piece, string sourceFileRank, string destFileRank);
+    void printMove (Piece* movingPiece, string sourceFileRank, 
+      string destFileRank, Piece* capturedPiece);
+
     void switchPlayers ();
 
 };

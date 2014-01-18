@@ -46,21 +46,100 @@ bool Piece::isSameDiagonal (string thatFileRank) {
   return (abs(this->file - thatFile) == abs(this->rank - thatRank));
 }
 
-bool Piece::noObstruction (string destFileRank, map<string, Piece*>* board) {
-// yes require expansion
-  return false;
+/* Piece.noVerticalObstruction()
+   Pre-cond.: destFileRank is in the same file and not the same rank as
+              this piece
+   Post-cond.: return true iff there are no piece in between this rank and
+               dest rank (exclusive)
+*/
+bool Piece::noVerticalObstruction 
+  (string destFileRank, map<string, Piece*>* board){
+
+  char destRank = destFileRank.at(ChessInfo::RANK_INDEX);
+  char lowRank = (rank < destRank) ? rank : destRank;
+  char highRank = (rank < destRank) ? destRank : rank;
+
+  for (char i = lowRank + ChessInfo::EXCLUSIVE_SHIFT; i < highRank; i++) {
+    string between ({ file, i });
+    try {
+      board -> at(between);
+      return false;
+    } catch (const std::out_of_range &err) {
+      // No piece for this file & rank, no action required
+    }
+  }
+  return true;
+}
+
+/* Piece.noHorizontalObstruction()
+   Pre-cond.: destFileRank is in the same rank as this piece
+   Post-cond.: return true iff there are no piece in between this file and
+               dest file (exclusive)
+*/
+bool Piece::noHorizontalObstruction
+  (string destFileRank, map<string, Piece*>* board){
+
+  char destFile = destFileRank.at(ChessInfo::FILE_INDEX);
+  char lowFile = (file < destFile) ? file : destFile;
+  char highFile = (file < destFile) ? destFile : file;
+
+  for (char i = lowFile + ChessInfo::EXCLUSIVE_SHIFT; i < highFile; i++) {
+    string between ({ i, rank });
+    try {
+      board -> at (between);
+      return false;
+    } catch (const std::out_of_range &err) {
+      // No piece for this file & rank, no action required
+    }
+  }
+  return true;
+}
+
+/* Piece.noDiagonalObstruction()
+   Pre-cond.: destFileRank is in the same diagonal as this piece
+   Post-cond.: return true iff there are no piece in between this piece and
+               dest file & rank on the diagonal (exclusive)
+*/
+bool Piece::noDiagonalObstruction
+  (string destFileRank, map<string, Piece*>* board){
+
+  char destFile = destFileRank.at(ChessInfo::FILE_INDEX);
+  char lowFile = (file < destFile) ? file : destFile;
+  char highFile = (file < destFile) ? destFile : file;
+
+  char destRank = destFileRank.at(ChessInfo::RANK_INDEX);
+  char lowRank = (rank < destRank) ? rank : destRank;
+  char highRank = (rank < destRank) ? destRank : rank;
+
+  bool isPositiveSlope = (destFile - file) == (destRank - rank);
+  string between;
+
+  for (int i = ChessInfo::EXCLUSIVE_SHIFT; i < (highFile - lowFile); i++) {
+    if (isPositiveSlope) {
+      between = { (char) (lowFile + i), (char) (lowRank + i) };
+    } else {
+      between = { (char) (lowFile + i), (char) (highRank - i) };
+    }
+
+    try {
+      board -> at (between);
+      return false;
+    } catch (const std::out_of_range &err) {
+      // No piece for this file & rank, no action required
+    }
+  }
+  return true;
 }
 
 bool Piece::destExistFriendlyPiece 
   (string destFileRank, map<string, Piece*>* board) {
 
   try {
-    Piece* destPiece = board->at(destFileRank);
-    if (isFriendly(destPiece)) {
+    if (isFriendly(board->at(destFileRank))) {
       return true;
     }
   } catch (const std::out_of_range &err) {
-    
+    // No piece for this file & rank, no action required
   }
   return false;
 }

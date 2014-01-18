@@ -38,7 +38,12 @@ class Piece {
     bool isSameRank (string thatFileRank);
     bool isSameDiagonal (string thatFileRank);
 
-    bool noObstruction (string destFileRank, map<string, Piece*>* board);
+    bool noVerticalObstruction 
+      (string destFileRank, map<string, Piece*>* board);
+    bool noHorizontalObstruction
+      (string destFileRank, map<string, Piece*>* board);
+    bool noDiagonalObstruction
+      (string destFileRank, map<string, Piece*>* board);
     
     bool destExistFriendlyPiece 
       (string destFileRank, map<string, Piece*>* board);   

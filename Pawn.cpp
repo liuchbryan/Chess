@@ -16,9 +16,8 @@ Pawn::Pawn (string fileRank, bool isWhitePlayer)
 */
 
 int Pawn::isValidMove (string destFileRank, map<string, Piece*>* board) {
-  char destFile = destFileRank.at(ChessInfo::FILE_INDEX);
+  
   char destRank = destFileRank.at(ChessInfo::RANK_INDEX);
-
   int rankAdvancement =
     _isWhitePlayer ? destRank - rank : rank - destRank;
 
@@ -27,8 +26,7 @@ int Pawn::isValidMove (string destFileRank, map<string, Piece*>* board) {
       if (!(isSameFile(destFileRank) && isFirstMove)) {
          return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
       }
-      string thisFileRank ({ file, rank });
-      if (!noObstruction(destFileRank, board)) {
+      if (!noVerticalObstruction(destFileRank, board)) {
          return ChessErrHandler::OBSTRUCTION_EN_ROUTE;
       }
       break;
@@ -49,14 +47,13 @@ int Pawn::isValidMove (string destFileRank, map<string, Piece*>* board) {
           return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
         }
       }
+      break;
     }
     default: return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
-
   }
 
   isFirstMove = false;
-  
-  return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
+  return ChessErrHandler::NO_ERROR;
 }
 
 string Pawn::toString () {

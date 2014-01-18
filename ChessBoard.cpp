@@ -35,6 +35,8 @@ void ChessBoard::submitMove(const char* fromSquare, const char* toSquare){
     return;
   }
 
+  handleMove (piece, sourceFileRank, destFileRank, board);
+
 
   switchPlayers();
 }    
@@ -44,8 +46,10 @@ void ChessBoard::resetBoard(){
   // leave it to later stage then
 
   board = new map<string, Piece*>;
+  isWhiteTurn = true;
+  isInCheck = false;
   
-  string fileRank({ 'A', '1' });
+  string fileRank ("A1");
 
   for (char i = ChessInfo::MIN_FILE; i <= ChessInfo::MAX_FILE; i++) {
     fileRank.front() = i;
@@ -150,6 +154,37 @@ void ChessBoard::handleInvalidMove
   (int returnCode, Piece* piece, string sourceFileRank, string destFileRank) {
 
   errorHandler->printErr(returnCode, piece, sourceFileRank, destFileRank);
+}
+
+void ChessBoard::handleMove (Piece* piece, string sourceFileRank, 
+  string destFileRank, map<string, Piece*>* board) {
+
+  try {
+    Piece* destPiece = board -> at (destFileRank);
+    printMove (piece, sourceFileRank, destFileRank, destPiece);
+    board -> at (destFileRank) = piece;
+    
+  } catch (const std::out_of_range &err) {
+    printMove (piece, sourceFileRank, destFileRank);
+    board -> insert ({ destFileRank, piece });
+  }
+
+  board -> erase (sourceFileRank);
+}
+
+void ChessBoard::printMove 
+  (Piece* movingPiece, string sourceFileRank, string destFileRank) {
+
+  cout << movingPiece -> toString() << " moves from "
+       << sourceFileRank << " to " << destFileRank << endl;
+}
+
+void ChessBoard::printMove (Piece* movingPiece, string sourceFileRank, 
+  string destFileRank, Piece* capturedPiece) {
+
+  cout << movingPiece -> toString() << " moves from "
+       << sourceFileRank << " to " << destFileRank
+       << " taking " << capturedPiece -> toString() << endl;
 }
 
 void ChessBoard::switchPlayers() {
