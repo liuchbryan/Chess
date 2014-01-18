@@ -17,7 +17,7 @@ class King : public Piece {
     string toString ();
   
   private:
-
+    bool isAdjacentSquare (string thatFileRank);
 };
 
 #endif

@@ -15,6 +15,11 @@ Piece::~Piece () {
 
 }
 
+void Piece::updateFileRank (string fileRank){
+  file = fileRank.at(ChessInfo::FILE_INDEX);
+  rank = fileRank.at(ChessInfo::RANK_INDEX);
+}
+
 bool Piece::isWhitePlayer () {
   return (_isWhitePlayer);
 }
@@ -43,7 +48,7 @@ bool Piece::isSameDiagonal (string thatFileRank) {
 
   char thatFile = thatFileRank.at(ChessInfo::FILE_INDEX);
   char thatRank = thatFileRank.at(ChessInfo::RANK_INDEX);
-  return (abs(this->file - thatFile) == abs(this->rank - thatRank));
+  return (abs (this->file - thatFile) == abs (this->rank - thatRank));
 }
 
 /* Piece.noVerticalObstruction()

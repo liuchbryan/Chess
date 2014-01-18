@@ -17,24 +17,24 @@ Pawn::Pawn (string fileRank, bool isWhitePlayer)
 
 int Pawn::isValidMove (string destFileRank, map<string, Piece*>* board) {
   
-  char destRank = destFileRank.at(ChessInfo::RANK_INDEX);
+  char destRank = destFileRank.at (ChessInfo::RANK_INDEX);
   int rankAdvancement =
     _isWhitePlayer ? destRank - rank : rank - destRank;
 
   switch (rankAdvancement) {
     case 2: {
-      if (!(isSameFile(destFileRank) && isFirstMove)) {
+      if (!(isSameFile (destFileRank) && isFirstMove)) {
          return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
       }
-      if (!noVerticalObstruction(destFileRank, board)) {
+      if (!noVerticalObstruction (destFileRank, board)) {
          return ChessErrHandler::OBSTRUCTION_EN_ROUTE;
       }
       break;
     }
     case 1: {
-      if (isSameFile(destFileRank)) {
+      if (isSameFile (destFileRank)) {
         try {
-          if (isFriendly(board->at(destFileRank))) {
+          if (isFriendly (board -> at (destFileRank))) {
             return ChessErrHandler::FRIENDLY_AT_DEST;
           } else {
             return ChessErrHandler::PAWN_ILLEGAL_CAPTURE_PATTERN;
@@ -43,7 +43,7 @@ int Pawn::isValidMove (string destFileRank, map<string, Piece*>* board) {
 
         }
       } else {
-        if (!canDiagonallyCapture(destFileRank, board)) {
+        if (!canDiagonallyCapture (destFileRank, board)) {
           return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
         }
       }
@@ -58,7 +58,7 @@ int Pawn::isValidMove (string destFileRank, map<string, Piece*>* board) {
 
 string Pawn::toString () {
   
-  string name (playerToString());
+  string name (playerToString ());
   name.append(" Pawn");
   return name;  
 }
@@ -71,7 +71,8 @@ bool Pawn::canDiagonallyCapture
   (string destFileRank, map<string, Piece*>* board) {
   
   try {
-    if (isAdjacentFile(destFileRank) && !isFriendly(board->at(destFileRank))) {
+    if (isAdjacentFile (destFileRank) && 
+        !isFriendly (board -> at (destFileRank))) {
       return true;
     }
   } catch (const std::out_of_range &err) {
@@ -82,6 +83,6 @@ bool Pawn::canDiagonallyCapture
 
 bool Pawn::isAdjacentFile (string thatFileRank) {
 
-  char thatFile = thatFileRank.at(ChessInfo::FILE_INDEX);
-  return abs(thatFile - file) == 1;
+  char thatFile = thatFileRank.at (ChessInfo::FILE_INDEX);
+  return abs (thatFile - file) == 1;
 } 

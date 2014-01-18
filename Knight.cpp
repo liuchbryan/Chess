@@ -7,7 +7,7 @@ Knight::Knight (string fileRank, bool isWhitePlayer)
 }
 
 int Knight::isValidMove (string destFileRank, map<string, Piece*>* board) {
-  if (!movesInLShape(destFileRank)) {
+  if (!movesInLShape (destFileRank)) {
     return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
   }
 
@@ -20,14 +20,15 @@ int Knight::isValidMove (string destFileRank, map<string, Piece*>* board) {
 
 string Knight::toString () {
   
-  string name (playerToString());
+  string name (playerToString ());
   name.append(" Knight");
   return name;  
 }
 
 bool Knight::movesInLShape (string destFileRank) {
+
   char destFile = destFileRank.at(ChessInfo::FILE_INDEX);
   char destRank = destFileRank.at(ChessInfo::RANK_INDEX);
 
-  return abs(file-destFile) * abs(rank-destRank) == 2;
+  return abs (file-destFile) * abs (rank-destRank) == 2;
 }

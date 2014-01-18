@@ -23,6 +23,8 @@ class Piece {
     Piece (string fileRank, bool isWhitePlayer);
     ~Piece ();
 
+    void updateFileRank (string fileRank);
+
     bool isWhitePlayer ();
         
     virtual int isValidMove 

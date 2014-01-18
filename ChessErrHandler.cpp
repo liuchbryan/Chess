@@ -24,24 +24,24 @@ void ChessErrHandler::printErr
     }
     case ChessErrHandler::NOT_OWNER_TURN : {
       cout << "It is not " << piece->playerToString () 
-           << " turn to move!" << endl;
+           << " turn to move! Be patient!" << endl;
       break;
     }
     case ChessErrHandler::MOVED_EMPTY_PIECE : {
-      cout << "There is nothing to move"
+      cout << "Playing Air Chess? There is nothing to move"
            << " at " << sourceFileRank << "!" << endl;
       break;
     }
     case ChessErrHandler::ILLEGAL_MOVE_PATTERN : {
       cout << "Illegal move for " << piece->toString() 
            << " at " << sourceFileRank << ": "
-           << "You cannot move it like that!" << endl;
+           << "Have you even read the rules?" << endl;
       break;
     }
     case ChessErrHandler::OBSTRUCTION_EN_ROUTE : {
       cout << "Illegal move for " << piece->toString()
-           << " at " << sourceFileRank << ": Obstruction while moving"
-           << " to " << destFileRank << endl;
+           << " at " << sourceFileRank << ": Way"
+           << " to " << destFileRank << " is blocked dude" << endl;
       break;
     }
     case ChessErrHandler::FRIENDLY_AT_DEST : {

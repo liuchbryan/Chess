@@ -14,8 +14,7 @@ ChessBoard::ChessBoard() {
   resetBoard();
 }
 
-ChessBoard::~ChessBoard()
-{
+ChessBoard::~ChessBoard() {
   cout << "TODO: implement ChessBoard deconstructor" << endl;
 }
 
@@ -169,6 +168,7 @@ void ChessBoard::handleMove (Piece* piece, string sourceFileRank,
     board -> insert ({ destFileRank, piece });
   }
 
+  piece -> updateFileRank (destFileRank);
   board -> erase (sourceFileRank);
 }
 
