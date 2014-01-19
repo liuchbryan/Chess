@@ -37,6 +37,9 @@ class ChessBoard {
     bool isWhiteTurn = true;
     bool isInCheck = false;
 
+    Piece* whiteKing;
+    Piece* blackKing;
+
   public:
     ChessBoard();
     ~ChessBoard();
@@ -57,6 +60,7 @@ class ChessBoard {
     void handleMove (Piece* piece, string sourceFileRank, 
       string destFileRank, map<string, Piece*>* board);
     void printMove (Piece* piece, string sourceFileRank, string destFileRank);
+    void printCapture (Piece* capturedPiece);
     void printMove (Piece* movingPiece, string sourceFileRank, 
       string destFileRank, Piece* capturedPiece);
 

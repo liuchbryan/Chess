@@ -34,9 +34,16 @@ void ChessBoard::submitMove(const char* fromSquare, const char* toSquare){
     return;
   }
 
+/*  Piece* sandboxPiece
+//    = new Piece (piece -> getFileRank, piece -> isWhitePlayer());
+  map<string, Piece*>* sandboxBoard = new map<string, Piece*> (*board);
+  if (!currPlayerKingSafeUnderMove 
+       (sandboxPiece, sourceFileRank, destFileRank, sandboxBoard)) return;*/
+  
+
   handleMove (piece, sourceFileRank, destFileRank, board);
 
-
+  cout << endl;
   switchPlayers();
 }    
 
@@ -64,19 +71,21 @@ void ChessBoard::resetBoard(){
   board->insert ({string("B1"), new Knight (string("B1"), true)});
   board->insert ({string("C1"), new Bishop (string("C1"), true)});
   board->insert ({string("D1"), new Queen (string("D1"), true)});
-  board->insert ({string("E1"), new King (string("E1"), true)});
   board->insert ({string("F1"), new Bishop (string("F1"), true)});
   board->insert ({string("G1"), new Knight (string("G1"), true)});
   board->insert ({string("H1"), new Rook (string("H1"), true)});
+  whiteKing = new King (string("E1"), true);
+  board->insert ({string("E1"), whiteKing});
 
   board->insert ({string("A8"), new Rook (string("A8"), false)});
   board->insert ({string("B8"), new Knight (string("B8"), false)});
   board->insert ({string("C8"), new Bishop (string("C8"), false)});
   board->insert ({string("D8"), new Queen (string("D8"), false)});
-  board->insert ({string("E8"), new King (string("E8"), false)});
   board->insert ({string("F8"), new Bishop (string("F8"), false)});
   board->insert ({string("G8"), new Knight (string("G8"), false)});
   board->insert ({string("H8"), new Rook (string("H8"), false)});
+  blackKing = new King (string("E8"), true);
+  board->insert ({string("E8"), blackKing});
 
   cout << "Let the game begin..." << endl;
 
@@ -155,12 +164,32 @@ void ChessBoard::handleInvalidMove
   errorHandler->printErr(returnCode, piece, sourceFileRank, destFileRank);
 }
 
+
+/*
+void ChessBoard::currPlayerKingSafeUnderMove 
+  (Piece* sandboxPiece, string sourceFileRank, 
+   string destFileRank, map<string, Piece*>* sandboxBoard) {
+  
+  try {
+    Piece* destPiece = sandboxBoard -> at (destFileRank);
+    board -> at (destFileRank) = sandboxPiece;
+  } catch (const std::out_of_range &err) {
+    sandboxBoard -> insert ({ destFileRank, sandboxPiece });
+  }
+  sandboxPiece -> updateFileRank (destFileRank);
+  board -> erase (sourceFileRank);
+
+// obviously require expansion
+
+} */
+
 void ChessBoard::handleMove (Piece* piece, string sourceFileRank, 
   string destFileRank, map<string, Piece*>* board) {
 
   try {
     Piece* destPiece = board -> at (destFileRank);
-    printMove (piece, sourceFileRank, destFileRank, destPiece);
+    printMove (piece, sourceFileRank, destFileRank);
+    printCapture (destPiece);
     board -> at (destFileRank) = piece;
     
   } catch (const std::out_of_range &err) {
@@ -176,15 +205,11 @@ void ChessBoard::printMove
   (Piece* movingPiece, string sourceFileRank, string destFileRank) {
 
   cout << movingPiece -> toString() << " moves from "
-       << sourceFileRank << " to " << destFileRank << endl;
+       << sourceFileRank << " to " << destFileRank;
 }
 
-void ChessBoard::printMove (Piece* movingPiece, string sourceFileRank, 
-  string destFileRank, Piece* capturedPiece) {
-
-  cout << movingPiece -> toString() << " moves from "
-       << sourceFileRank << " to " << destFileRank
-       << " taking " << capturedPiece -> toString() << endl;
+void ChessBoard::printCapture (Piece* capturedPiece) {
+  cout << " taking " << capturedPiece -> toString();
 }
 
 void ChessBoard::switchPlayers() {
