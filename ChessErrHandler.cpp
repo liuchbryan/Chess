@@ -41,7 +41,7 @@ void ChessErrHandler::printErr
     case ChessErrHandler::OBSTRUCTION_EN_ROUTE : {
       cout << "Illegal move for " << piece->toString()
            << " at " << sourceFileRank << ": Way"
-           << " to " << destFileRank << " is blocked dude" << endl;
+           << " to " << destFileRank << " is blocked dude." << endl;
       break;
     }
     case ChessErrHandler::FRIENDLY_AT_DEST : {
@@ -52,8 +52,13 @@ void ChessErrHandler::printErr
     }
     case ChessErrHandler::PAWN_ILLEGAL_CAPTURE_PATTERN : {
       cout << "Illegal move for " << piece->toString()
-           << " at " << sourceFileRank << ": You cannot capture piece"
-           << "directly ahead!" << endl;
+           << " at " << sourceFileRank << ": Head-on collision is not allowed!"
+           << "" << endl;
+      break;
+    }
+    default : {
+      cout << "An unexpected error has occured, please try again." << endl;
+      break;
     }
   }
 

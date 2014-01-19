@@ -7,49 +7,60 @@ Pawn::Pawn (string fileRank, bool isWhitePlayer)
 }
 
 /* A Pawn has the following valid moves:
-   
+   Move vertically (advance in rank): 
+   Allow to advance 2 ranks iff 
+    - it is its first move; and 
+    - there is no obstruction in the intermediate square
+   Allow to advance (1 or 2 ranks) iff
+    - there is no piece at the destination square
 
-
-
-
-
+   Capture diagonally:
+   Allow move diagonally (and capture) iff
+    - destination is 1 rank ahead and in adjacent file; and
+    - (existing) piece in destination belongs to the rivalry
 */
-
 int Pawn::isValidMove (string destFileRank, map<string, Piece*>* board) {
   
   char destRank = destFileRank.at (ChessInfo::RANK_INDEX);
   int rankAdvancement =
     _isWhitePlayer ? destRank - rank : rank - destRank;
 
-  switch (rankAdvancement) {
-    case 2: {
-      if (!(isSameFile (destFileRank) && isFirstMove)) {
-         return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
-      }
-      if (!noVerticalObstruction (destFileRank, board)) {
-         return ChessErrHandler::OBSTRUCTION_EN_ROUTE;
-      }
-      break;
-    }
-    case 1: {
-      if (isSameFile (destFileRank)) {
-        try {
-          if (isFriendly (board -> at (destFileRank))) {
-            return ChessErrHandler::FRIENDLY_AT_DEST;
-          } else {
-            return ChessErrHandler::PAWN_ILLEGAL_CAPTURE_PATTERN;
-          }
-        } catch (const std::out_of_range &err) {
-
-        }
-      } else {
-        if (!canDiagonallyCapture (destFileRank, board)) {
+  if (isSameFile (destFileRank)) {
+    switch (rankAdvancement) {
+      case 2: {
+        if (!isFirstMove) {
           return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
         }
+        if (!noVerticalObstruction (destFileRank, board)) {
+          return ChessErrHandler::OBSTRUCTION_EN_ROUTE;
+        }
+        break;
       }
-      break;
+      
+      case 1: break;
+      default: return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
     }
-    default: return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
+    
+    try {
+      if (isFriendly (board -> at (destFileRank))) {
+        return ChessErrHandler::FRIENDLY_AT_DEST;
+      } else {
+        return ChessErrHandler::PAWN_ILLEGAL_CAPTURE_PATTERN;
+      }
+    } catch (const std::out_of_range &err) {
+
+    }
+
+  } else {
+    try {
+      if (!(rankAdvancement == 1 && isAdjacentFile (destFileRank) &&
+            !isFriendly (board -> at (destFileRank)))) {
+        return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
+      }
+    } catch (const std::out_of_range &err) {
+      return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
+    }
+
   }
 
   isFirstMove = false;
@@ -63,26 +74,10 @@ string Pawn::toString () {
   return name;  
 }
 
-/* A pawn can move diagonally (i.e. advance 1 rank and not in same file) iff:
-   the destination file is adjacent to the current file (abs diff = 1), and
-   the (non-empty) piece in destination is not a friendly (can capture)
-*/
-bool Pawn::canDiagonallyCapture 
-  (string destFileRank, map<string, Piece*>* board) {
-  
-  try {
-    if (isAdjacentFile (destFileRank) && 
-        !isFriendly (board -> at (destFileRank))) {
-      return true;
-    }
-  } catch (const std::out_of_range &err) {
-
-  }
-  return false;
-}
+// Pawn.isAdjacentFile() : absolute file difference is 1
 
 bool Pawn::isAdjacentFile (string thatFileRank) {
 
   char thatFile = thatFileRank.at (ChessInfo::FILE_INDEX);
   return abs (thatFile - file) == 1;
-} 
+}
