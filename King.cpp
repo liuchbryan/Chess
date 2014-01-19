@@ -1,3 +1,5 @@
+// Bryan Liu (chl312), Dept. of Computing, Imperial College London
+// King.cpp - implementation of King extending Piece (info in King.hpp)
 
 #include "King.hpp"
 
@@ -6,6 +8,14 @@ King::King (string fileRank, bool isWhitePlayer)
 
 }
 
+/* A King's move is valid iff:
+   - The destination is on its adjacent square
+   - The (possibly) existing piece at destination is not a friendly
+     (or destination is empty)
+
+   King.isValidMove() post-cond: retrun 0 if move is valid as above
+                                 respective error code otherwise
+*/
 int King::isValidMove (string destFileRank, map<string, Piece*>* board) {
   
   if (!isAdjacentSquare (destFileRank)) {
@@ -26,6 +36,10 @@ string King::toString () {
   return name;  
 }
 
+/* King.isAdjacentSquare():
+   pre-cond: arg is valid file & rank representation of a different square
+   post-cond: return true iff the displacement of file and rank is at most 1
+*/
 bool King::isAdjacentSquare (string thatFileRank) {
   
   char thatFile = thatFileRank.at(ChessInfo::FILE_INDEX);

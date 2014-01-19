@@ -1,6 +1,7 @@
 // Bryan Liu (chl312), Dept. of Computing, Imperial College London
-
-// Implementation for abstract class Piece (Constructor, Deconstructor)
+/* Implementation for abstract class Piece - info in Piece.hpp
+   (Constructor, Deconstructor and common methods for extending classes)
+*/
 
 #include "Piece.hpp"
 
@@ -10,42 +11,51 @@ Piece::Piece (string fileRank, bool isWhitePlayer){
   _isWhitePlayer = isWhitePlayer;
 }
 
-Piece::~Piece () {
-
-
+// Getter and setter for file & rank of a piece
+string Piece::getFileRank () {
+  return string ({ file, rank });
 }
 
-void Piece::updateFileRank (string fileRank){
+void Piece::updateFileRank (string fileRank) {
   file = fileRank.at(ChessInfo::FILE_INDEX);
   rank = fileRank.at(ChessInfo::RANK_INDEX);
 }
 
+// Piece.isWhitePlayer() post-cond.: return if this piece belongs to White P.
 bool Piece::isWhitePlayer () {
   return (_isWhitePlayer);
 }
 
+/* Piece.isFriendly()
+   Pre-cond.: that is a valid reference to a Piece
+   Post-cond.: return true iff this and that Piece belongs to same player
+*/
 bool Piece::isFriendly (Piece* that) {
   return this->isWhitePlayer() == that->isWhitePlayer();
 }
 
+// Piece.playerToString() Post-cond.: return string rep. of the piece's player
 string Piece::playerToString () {
   return _isWhitePlayer? string("White's") : string("Black's");
 }
 
+/* Piece::isSame_ ()
+   Pre-cond.: thatFileRank is a valid file & rank representation
+   Post-cond.: return true iff given file & rank is on the same
+               file/rank/diagonal with this piece
+   (N.B.: same diagonal - abs file difference = abs rank difference)
+*/ 
 bool Piece::isSameFile (string thatFileRank) {
-
   char thatFile = thatFileRank.at(ChessInfo::FILE_INDEX);
   return this->file == thatFile;
 }
 
 bool Piece::isSameRank (string thatFileRank) {
-
   char thatRank = thatFileRank.at(ChessInfo::RANK_INDEX);
   return this->rank == thatRank;
 }
 
 bool Piece::isSameDiagonal (string thatFileRank) {
-
   char thatFile = thatFileRank.at(ChessInfo::FILE_INDEX);
   char thatRank = thatFileRank.at(ChessInfo::RANK_INDEX);
   return (abs (this->file - thatFile) == abs (this->rank - thatRank));
@@ -136,6 +146,11 @@ bool Piece::noDiagonalObstruction
   return true;
 }
 
+/* Piece.destExistFriendlyPiece()
+   Pre-cond.: destFileRank is a valid file & rank representation
+   Post-cond.: return true if piece on the dest file & rank is a friendly,
+               false otherwise (rivalry on dest or empty square)
+*/
 bool Piece::destExistFriendlyPiece 
   (string destFileRank, map<string, Piece*>* board) {
 
@@ -144,7 +159,7 @@ bool Piece::destExistFriendlyPiece
       return true;
     }
   } catch (const std::out_of_range &err) {
-    // No piece for this file & rank, no action required
+    // No piece for this file & rank, expect to return false
   }
   return false;
 }

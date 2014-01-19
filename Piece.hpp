@@ -1,4 +1,10 @@
 // Bryan Liu (chl312), Dept. of Computing, Imperial College London
+// Piece.hpp - (abstract class) Piece
+
+/* Represent Implementation of a general piece in chess
+   Including general, common methods a piece using to validate its own move
+    and hook methods isValidMove() and toString()   
+*/
 
 #ifndef PIECES_H
 #define PIECES_H
@@ -21,15 +27,26 @@ class Piece {
 
   public:
     Piece (string fileRank, bool isWhitePlayer);
-    ~Piece ();
 
+    string getFileRank ();
     void updateFileRank (string fileRank);
 
     bool isWhitePlayer ();
         
+  /* Piece.isValidMove()
+     Pre-cond.: destFileRank is a valid file & rank representation
+                board a reference to an existing map implementation of
+                 current chess board situation
+     Post-cond.: return 0 if the move is valid
+                 respective error code (defined in ChessErrHandler class)
+                  for error reporting otherwise
+  */
     virtual int isValidMove 
       (string destFileRank, map<string, Piece*>* board) = 0;
 
+  /* Piece.toString()
+     Post-cond.: return the string representation of the piece
+  */
     string playerToString ();
     virtual string toString () = 0;
 

@@ -1,3 +1,11 @@
+// Bryan Liu (chl312), Dept. of Computing, Imperial College London
+// Queen.hpp - Queen extending Piece
+
+/* Represent Implementation of a Queen piece in chess
+   Including concrete implementation of isValidMove() and toString()
+     inherited from abstract superclass Piece
+*/
+
 #ifndef QUEEN_H
 #define QUEEN_H
 
@@ -8,16 +16,10 @@
 
 class Queen : public Piece {
 
-  private:
-
-
   public:
     Queen (string fileRank, bool isWhitePlayer);
     int isValidMove (string destFileRank, map<string, Piece*>* board);
     string toString ();
-  
-  private:
-
 };
 
 #endif
