@@ -1,3 +1,5 @@
+// Bryan Liu (chl312), Dept. of Computing, Imperial College London
+// Pawn.cpp - implementation of Pawn as a Piece
 
 #include "Pawn.hpp"
 
