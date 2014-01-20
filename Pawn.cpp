@@ -25,6 +25,10 @@ Pawn::Pawn (string fileRank, bool isWhitePlayer)
                                  respective error code otherwise
 */
 int Pawn::isValidMove (string destFileRank, map<string, Piece*>* board) {
+
+  if (isSameFile(destFileRank) && isSameRank(destFileRank)) {
+    return ChessErrHandler::DEST_EQ_SOURCE;
+  }
   
   /* Pawn is only allowed to move "forward"
      with calculations depending on which side it belongs
@@ -75,7 +79,6 @@ int Pawn::isValidMove (string destFileRank, map<string, Piece*>* board) {
     }
   }
 
-  isFirstMove = false;
   return ChessErrHandler::NO_ERROR;
 }
 

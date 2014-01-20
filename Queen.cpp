@@ -19,6 +19,10 @@ Queen::Queen (string fileRank, bool isWhitePlayer)
 */
 int Queen::isValidMove (string destFileRank, map<string, Piece*>* board) {
 
+  if (isSameFile(destFileRank) && isSameRank(destFileRank)) {
+    return ChessErrHandler::DEST_EQ_SOURCE;
+  }
+
   if (!(isSameFile (destFileRank) || isSameRank (destFileRank) ||
         isSameDiagonal (destFileRank))) {
     return ChessErrHandler::ILLEGAL_MOVE_PATTERN;

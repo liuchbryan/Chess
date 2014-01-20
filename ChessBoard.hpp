@@ -34,11 +34,12 @@ class ChessBoard {
     map<string, Piece*>* board;
     ChessErrHandler* errorHandler;
 
-    bool isWhiteTurn = true;
-    bool isInCheck = false;
-
     Piece* whiteKing;
     Piece* blackKing;
+
+    bool isWhiteTurn = true;
+    bool isInCheck = false;
+    bool hasEnded = false;
 
   public:
     ChessBoard();
@@ -60,17 +61,20 @@ class ChessBoard {
     bool kingIsSafeFromRivalry 
       (Piece* kingToBeExamined, map<string, Piece*>* board);
 
-    Piece* conductMoveAndReturnCaptured (Piece* piece, string sourceFileRank,
+    Piece* tryMoveAndReturnCaptured (Piece* piece, string sourceFileRank,
       string destFileRank, map<string, Piece*>* board);
     void reverseMove (Piece* movingPiece, string sourceFileRank,
       Piece* capturedPiece, string destFileRank, map<string, Piece*>* board);
 
+    void switchPlayers ();
+
+    bool playerHaveValidMove (bool isWhiteTurn, map<string, Piece*>* board);
+
     void printMove (Piece* piece, string sourceFileRank, string destFileRank);
     void printCapture (Piece* capturedPiece);
     void printCheck ();
-
-    void switchPlayers ();
-
+    void printCheckmate (bool isWhitePlayer);
+    void printStalemate ();
 };
 
 #endif

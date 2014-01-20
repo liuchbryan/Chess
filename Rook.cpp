@@ -19,6 +19,10 @@ Rook::Rook (string fileRank, bool isWhitePlayer)
 */
 int Rook::isValidMove (string destFileRank, map<string, Piece*>* board) {
 
+  if (isSameFile(destFileRank) && isSameRank(destFileRank)) {
+    return ChessErrHandler::DEST_EQ_SOURCE;
+  }
+
   if (!(isSameFile (destFileRank) || isSameRank (destFileRank))) {
     return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
   }

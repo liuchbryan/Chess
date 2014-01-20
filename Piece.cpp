@@ -21,6 +21,10 @@ void Piece::updateFileRank (string fileRank) {
   rank = fileRank.at(ChessInfo::RANK_INDEX);
 }
 
+void Piece::confirmMove () {
+  isFirstMove = false;
+}
+
 // Piece.isWhitePlayer() post-cond.: return if this piece belongs to White P.
 bool Piece::isWhitePlayer () {
   return (_isWhitePlayer);

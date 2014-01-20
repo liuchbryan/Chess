@@ -4,8 +4,7 @@
 /* Represent Implementation of a Pawn piece in chess
    Including concrete implementation of isValidMove() and toString()
      inherited from abstract superclass Piece
-   Private variable isFirstMove and method isAdjacentFile() used in logic of
-     validing move of a Pawn
+   Private method isAdjacentFile() used in logic of validing move of a Pawn
 */
 
 #ifndef PAWN_H
@@ -17,9 +16,6 @@
 #include "Piece.hpp"
 
 class Pawn : public Piece {
-
-  private:
-    bool isFirstMove = true;
 
   public:
     Pawn (string fileRank, bool isWhitePlayer);

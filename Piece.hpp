@@ -24,30 +24,30 @@ class Piece {
     char file;
     char rank;
     bool _isWhitePlayer;
+    bool isFirstMove = true;
 
   public:
     Piece (string fileRank, bool isWhitePlayer);
 
     string getFileRank ();
     void updateFileRank (string fileRank);
+    void confirmMove ();
 
     bool isWhitePlayer ();
-        
-  /* Piece.isValidMove()
-     Pre-cond.: destFileRank is a valid file & rank representation
-                board a reference to an existing map implementation of
-                 current chess board situation
-     Post-cond.: return 0 if the move is valid
-                 respective error code (defined in ChessErrHandler class)
-                  for error reporting otherwise
-  */
-    virtual int isValidMove 
+
+    /* Piece.isValidMove()
+       Pre-cond.: destFileRank is a valid file & rank representation
+                  board is a reference to an existing map implementation of
+                    current chess board situation
+       Post-cond.: return 0 if the move is valid
+                   respective error code (defined in ChessErrHandler class)
+                     for error reporting otherwise
+    */
+    virtual int isValidMove
       (string destFileRank, map<string, Piece*>* board) = 0;
 
-  /* Piece.toString()
-     Post-cond.: return the string representation of the piece
-  */
     string playerToString ();
+    // Piece.toString() Post-cond.: return the string rep. of the piece
     virtual string toString () = 0;
 
   protected:

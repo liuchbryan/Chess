@@ -29,13 +29,13 @@ void ChessBoard::submitMove(const char* fromSquare, const char* toSquare){
   Piece* piece = board->at(sourceFileRank);
   if (!isCurrentPlayerPiece (piece)) return;
 
-  int returnCode = piece->isValidMove (destFileRank, board);
+  int returnCode = piece -> isValidMove (destFileRank, board);
   if (returnCode != ChessErrHandler::NO_ERROR) {
     handleInvalidMove (returnCode, piece, sourceFileRank, destFileRank);
     return;
   }
 
-  Piece* capturedPiece = conductMoveAndReturnCaptured 
+  Piece* capturedPiece = tryMoveAndReturnCaptured 
                          (piece, sourceFileRank, destFileRank, board);
   Piece* currPlayerKing = isWhiteTurn? whiteKing : blackKing;
   Piece* nextPlayerKing = isWhiteTurn? blackKing : whiteKing;
@@ -46,9 +46,11 @@ void ChessBoard::submitMove(const char* fromSquare, const char* toSquare){
     return;
   }
 
+  piece -> confirmMove();
+  isInCheck = false;
+
   printMove (piece, sourceFileRank, destFileRank);
-  if (capturedPiece -> isValidMove (destFileRank, board) 
-        != ChessErrHandler::MOVED_EMPTY_PIECE) {
+  if (capturedPiece != NULL) {
     printCapture (capturedPiece);
   }
   if (!kingIsSafeFromRivalry (nextPlayerKing, board)) {
@@ -57,7 +59,16 @@ void ChessBoard::submitMove(const char* fromSquare, const char* toSquare){
   }
 
   cout << endl;
-  switchPlayers();
+  switchPlayers ();
+
+  if (!playerHaveValidMove (isWhiteTurn, board)) {
+    if (isInCheck) {
+      printCheckmate (isWhiteTurn);
+    } else {
+      printStalemate () ;
+    }
+    hasEnded = true;
+  }
 }    
 
 void ChessBoard::resetBoard(){
@@ -67,6 +78,7 @@ void ChessBoard::resetBoard(){
   board = new map<string, Piece*>;
   isWhiteTurn = true;
   isInCheck = false;
+  hasEnded = false;
   
   string fileRank ("A1");
 
@@ -116,13 +128,6 @@ void ChessBoard::resetBoard(){
 
 bool ChessBoard::sourceAndDestIsValid 
   (string sourceFileRank, string destFileRank) {
-
-  if (sourceFileRank.compare(destFileRank) == 0) {
-    errorHandler->printErr(ChessErrHandler::DEST_EQ_SOURCE,
-                           new EmptyPiece("  ", true),
-                           sourceFileRank, destFileRank); 
-    return false;
-  }
 
   if (!withinChessBoard(sourceFileRank)) {
     errorHandler->printErr(ChessErrHandler::SOURCE_OUTOF_BOUND,
@@ -185,8 +190,8 @@ bool ChessBoard::kingIsSafeFromRivalry
   bool kingIsWhite = kingToBeExamined -> isWhitePlayer ();
   string kingFileRank = kingToBeExamined -> getFileRank ();
 
-  for (map<string, Piece*>::iterator it = board -> begin (); 
-       it != board -> end (); it++) {
+  for (map<string, Piece*>::const_iterator it = board -> cbegin (); 
+       it != board -> cend (); it++) {
     Piece* challengingPiece = it -> second;
     if (challengingPiece != kingToBeExamined &&
         challengingPiece -> isWhitePlayer () != kingIsWhite &&
@@ -198,7 +203,7 @@ bool ChessBoard::kingIsSafeFromRivalry
   return true;
 }
 
-Piece* ChessBoard::conductMoveAndReturnCaptured (Piece* piece,
+Piece* ChessBoard::tryMoveAndReturnCaptured (Piece* piece,
   string sourceFileRank, string destFileRank, map<string, Piece*>* board) {
   
   Piece* destPiece;
@@ -206,7 +211,7 @@ Piece* ChessBoard::conductMoveAndReturnCaptured (Piece* piece,
     destPiece = board -> at (destFileRank);    
     board -> at (destFileRank) = piece;
   } catch (const std::out_of_range &err) {
-    destPiece = new EmptyPiece (destFileRank, true);
+    destPiece = NULL;
     board -> insert ({ destFileRank, piece });
   }
   
@@ -220,14 +225,49 @@ void ChessBoard::reverseMove (Piece* movingPiece, string sourceFileRank,
   Piece* capturedPiece, string destFileRank, map<string, Piece*>* board) {
 
   board -> erase (destFileRank);
-  if (capturedPiece -> isValidMove (destFileRank, board)
-        == ChessErrHandler::MOVED_EMPTY_PIECE) {
-    
-  } else {
+  if (capturedPiece != NULL) {
     board -> insert ({ destFileRank, capturedPiece });
   }
   movingPiece -> updateFileRank (sourceFileRank);
   board -> insert ({ sourceFileRank, movingPiece });
+}
+
+void ChessBoard::switchPlayers() {
+  isWhiteTurn = !(isWhiteTurn);
+}
+
+bool ChessBoard::playerHaveValidMove
+  (bool isWhiteTurn, map<string, Piece*>* board) {
+  /*for (map<string, Piece*>::const_iterator it = board -> cbegin (); 
+       it != board -> cend (); ++it) {
+    //the iterator got stuck in B6 - which is a problem to address
+    //cout << it -> first << " ";
+    Piece* currPiece = it -> second;
+    string currFileRank = currPiece -> getFileRank();
+    //cout << currPiece -> toString () << ": "<< currPiece << " ";
+    if (currPiece -> isWhitePlayer() == isWhiteTurn) {
+      for (char i = ChessInfo::MIN_FILE ; i <= ChessInfo::MAX_FILE; i++) {
+        for (char j = ChessInfo::MIN_RANK; j <= ChessInfo::MAX_RANK; j++) {
+          string possibleFileRank ({ i, j });
+          if (currPiece -> isValidMove (possibleFileRank, board)
+                == ChessErrHandler::NO_ERROR) {
+            //cout << possibleFileRank << " ";
+            Piece* captured = tryMoveAndReturnCaptured (currPiece, 
+                               currFileRank, possibleFileRank, board);
+            if (kingIsSafeFromRivalry ((isWhiteTurn? whiteKing : blackKing), board)) {
+              reverseMove (currPiece, currFileRank, captured, possibleFileRank, board);
+              return true;
+            }
+            reverseMove (currPiece, currFileRank, captured, possibleFileRank, board);
+          }
+        }
+      }
+
+    }
+//    cout << endl;
+  }*/
+  return false;
+
 }
 
 void ChessBoard::printMove
@@ -245,6 +285,12 @@ void ChessBoard::printCheck () {
   cout << ", Check!";
 }
 
-void ChessBoard::switchPlayers() {
-  isWhiteTurn = !(isWhiteTurn);
+void ChessBoard::printCheckmate (bool isWhiteTurn) {
+  cout << "Checkmate! " << (isWhiteTurn? "White" : "Black")
+       << " loses." << endl;
+
+}
+
+void ChessBoard::printStalemate () {
+  cout << "Stalemate." << endl;
 }

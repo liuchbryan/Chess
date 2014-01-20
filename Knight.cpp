@@ -17,6 +17,11 @@ Knight::Knight (string fileRank, bool isWhitePlayer)
                                    respective error code otherwise
 */
 int Knight::isValidMove (string destFileRank, map<string, Piece*>* board) {
+
+  if (isSameFile(destFileRank) && isSameRank(destFileRank)) {
+    return ChessErrHandler::DEST_EQ_SOURCE;
+  }
+
   if (!movesInLShape (destFileRank)) {
     return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
   }

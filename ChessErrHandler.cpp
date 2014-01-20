@@ -10,8 +10,8 @@ void ChessErrHandler::printErr
 
   switch (errNo) {
     case ChessErrHandler::DEST_EQ_SOURCE : {
-      cout << "Skipping your move by moving a piece to its original position? "
-           << "Cunning..." << endl;
+      cout << "Skipping your move? You cannot move from "
+           << sourceFileRank << " to " << sourceFileRank << "!" << endl;
       break;
     }
     case ChessErrHandler::SOURCE_OUTOF_BOUND : {
@@ -64,6 +64,11 @@ void ChessErrHandler::printErr
       }
       break;
     }
+    case ChessErrHandler::GAME_HAS_ENDED : {
+      cout << "The game has ended!" << endl;
+      break;
+    }
+    
     default : {
       cout << "An unexpected error has occured. Please try again." << endl;
     }

@@ -17,6 +17,10 @@ King::King (string fileRank, bool isWhitePlayer)
                                  respective error code otherwise
 */
 int King::isValidMove (string destFileRank, map<string, Piece*>* board) {
+
+  if (isSameFile(destFileRank) && isSameRank(destFileRank)) {
+    return ChessErrHandler::DEST_EQ_SOURCE;
+  }
   
   if (!isAdjacentSquare (destFileRank)) {
     return ChessErrHandler::ILLEGAL_MOVE_PATTERN;

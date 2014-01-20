@@ -20,6 +20,7 @@ class ChessErrHandler {
     static const int FRIENDLY_AT_DEST = 42;
     static const int PAWN_ILLEGAL_CAPTURE_PATTERN = 43;
     static const int ALLOW_KING_IN_CHECK = 45;
+    static const int GAME_HAS_ENDED = 50;
 
   public:
     ChessErrHandler ();

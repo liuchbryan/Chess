@@ -18,6 +18,10 @@ Bishop::Bishop (string fileRank, bool isWhitePlayer)
                                    respective error code otherwise
 */
 int Bishop::isValidMove (string destFileRank, map<string, Piece*>* board) {
+
+  if (isSameFile(destFileRank) && isSameRank(destFileRank)) {
+    return ChessErrHandler::DEST_EQ_SOURCE;
+  }
  
   if (!isSameDiagonal (destFileRank)) {
     return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
