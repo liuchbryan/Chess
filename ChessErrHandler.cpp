@@ -58,7 +58,7 @@ void ChessErrHandler::printErr
           break;
         }
         case ChessErrHandler::ALLOW_KING_IN_CHECK : {
-          cout << "Now go back and protect your King!" << endl;
+          cout << "Now go back and keep your King (or yourself) safe!" << endl;
           break;
         }
       }

@@ -55,14 +55,19 @@ class ChessBoard {
     bool sourceIsNotEmpty (string fileRank);
     bool isCurrentPlayerPiece (Piece* piece);
     void handleInvalidMove (int returnCode, Piece* piece, 
-                            string sourceFileRank, string destFileRank);
+      string sourceFileRank, string destFileRank);
 
-    void handleMove (Piece* piece, string sourceFileRank, 
+    bool kingIsSafeFromRivalry 
+      (Piece* kingToBeExamined, map<string, Piece*>* board);
+
+    Piece* conductMoveAndReturnCaptured (Piece* piece, string sourceFileRank,
       string destFileRank, map<string, Piece*>* board);
+    void reverseMove (Piece* movingPiece, string sourceFileRank,
+      Piece* capturedPiece, string destFileRank, map<string, Piece*>* board);
+
     void printMove (Piece* piece, string sourceFileRank, string destFileRank);
     void printCapture (Piece* capturedPiece);
-    void printMove (Piece* movingPiece, string sourceFileRank, 
-      string destFileRank, Piece* capturedPiece);
+    void printCheck ();
 
     void switchPlayers ();
 

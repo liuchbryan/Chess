@@ -7,7 +7,7 @@ EmptyPiece::EmptyPiece (string fileRank, bool isWhitePlayer)
 }
 
 int EmptyPiece::isValidMove (string destFileRank, map<string, Piece*>* board) {
-  return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
+  return ChessErrHandler::MOVED_EMPTY_PIECE;
 }
 
 string EmptyPiece::toString () {
