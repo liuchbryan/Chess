@@ -59,9 +59,9 @@ void ChessBoard::submitMove(const char* fromSquare, const char* toSquare){
   }
 
   cout << endl;
-  switchPlayers ();
+  
 
-  if (!playerHaveValidMove (isWhiteTurn, board)) {
+  if (!playerHaveValidMove (nextPlayerKing, board)) {
     if (isInCheck) {
       printCheckmate (isWhiteTurn);
     } else {
@@ -69,6 +69,8 @@ void ChessBoard::submitMove(const char* fromSquare, const char* toSquare){
     }
     hasEnded = true;
   }
+
+  switchPlayers ();
 }    
 
 void ChessBoard::resetBoard(){
@@ -237,35 +239,34 @@ void ChessBoard::switchPlayers() {
 }
 
 bool ChessBoard::playerHaveValidMove
-  (bool isWhiteTurn, map<string, Piece*>* board) {
-  /*for (map<string, Piece*>::const_iterator it = board -> cbegin (); 
+  (Piece* currPlayerKing, map<string, Piece*>* board) {
+
+  for (map<string, Piece*>::const_iterator it = board -> cbegin (); 
        it != board -> cend (); ++it) {
-    //the iterator got stuck in B6 - which is a problem to address
-    //cout << it -> first << " ";
+
     Piece* currPiece = it -> second;
     string currFileRank = currPiece -> getFileRank();
-    //cout << currPiece -> toString () << ": "<< currPiece << " ";
-    if (currPiece -> isWhitePlayer() == isWhiteTurn) {
+
+    if (currPiece -> isWhitePlayer() == currPlayerKing -> isWhitePlayer ()) {
       for (char i = ChessInfo::MIN_FILE ; i <= ChessInfo::MAX_FILE; i++) {
         for (char j = ChessInfo::MIN_RANK; j <= ChessInfo::MAX_RANK; j++) {
           string possibleFileRank ({ i, j });
           if (currPiece -> isValidMove (possibleFileRank, board)
                 == ChessErrHandler::NO_ERROR) {
-            //cout << possibleFileRank << " ";
+            map<string, Piece*>* sandbox = new map<string, Piece*> (*board);
             Piece* captured = tryMoveAndReturnCaptured (currPiece, 
-                               currFileRank, possibleFileRank, board);
-            if (kingIsSafeFromRivalry ((isWhiteTurn? whiteKing : blackKing), board)) {
-              reverseMove (currPiece, currFileRank, captured, possibleFileRank, board);
+                               currFileRank, possibleFileRank, sandbox);
+            if (kingIsSafeFromRivalry (currPlayerKing, sandbox)) {
+              reverseMove (currPiece, currFileRank, captured, possibleFileRank, sandbox);
               return true;
             }
-            reverseMove (currPiece, currFileRank, captured, possibleFileRank, board);
+            reverseMove (currPiece, currFileRank, captured, possibleFileRank, sandbox);
           }
         }
       }
 
     }
-//    cout << endl;
-  }*/
+  }
   return false;
 
 }

@@ -68,7 +68,7 @@ class ChessBoard {
 
     void switchPlayers ();
 
-    bool playerHaveValidMove (bool isWhiteTurn, map<string, Piece*>* board);
+    bool playerHaveValidMove (Piece* currPlayerKing, map<string, Piece*>* board);
 
     void printMove (Piece* piece, string sourceFileRank, string destFileRank);
     void printCapture (Piece* capturedPiece);
