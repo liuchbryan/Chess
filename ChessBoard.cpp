@@ -31,16 +31,11 @@ void ChessBoard::submitMove(const char* fromSquare, const char* toSquare){
   if (!isCurrentPlayerPiece (piece)) return;
 
   int returnCode = piece -> isValidMove (destFileRank, board);
-  if (returnCode != ChessErrHandler::NO_ERROR) {
-    handleInvalidMove (returnCode, piece, sourceFileRank, destFileRank);
-    return;
-  }
+  if (!pieceMoveIsValid (returnCode, piece, sourceFileRank, destFileRank)) return;
   
   Board* sandboxBoard = cloneBoard (board);
-
   Piece* capturedPiece 
     = tryMoveAndReturnCaptured (sourceFileRank, destFileRank, sandboxBoard);
-
   if (!kingIsSafeFromRivalry (isWhiteTurn, sandboxBoard)) {
     handleInvalidMove (ChessErrHandler::ALLOW_KING_IN_CHECK, piece, 
                        sourceFileRank, destFileRank);
@@ -82,7 +77,6 @@ void ChessBoard::resetBoard(){
   hasEnded = false;
   
   string fileRank ("A1");
-
   for (char i = ChessInfo::MIN_FILE; i <= ChessInfo::MAX_FILE; i++) {
     fileRank.front() = i;
 
@@ -112,7 +106,6 @@ void ChessBoard::resetBoard(){
   board->insert ({string("H8"), new Rook (string("H8"), false)});
 
   cout << "Let the game begin..." << endl;
-
 }
 
 // Please do not judge me on if condition then false else true,
@@ -143,10 +136,8 @@ bool ChessBoard::sourceAndDestIsValid
                            sourceFileRank, destFileRank);
     return false;
   }
-
   return true;
 }
-
 
 bool ChessBoard::withinChessBoard (string fileRank) {
   
@@ -179,7 +170,17 @@ bool ChessBoard::isCurrentPlayerPiece (Piece* piece) {
   return isCurrentPlayerPiece;
 }
 
-void ChessBoard::handleInvalidMove 
+bool ChessBoard::pieceMoveIsValid
+  (int returnCode, Piece* piece, string sourceFileRank, string destFileRank) {
+
+  if (returnCode != ChessErrHandler::NO_ERROR) {
+    handleInvalidMove (returnCode, piece, sourceFileRank, destFileRank);
+    return false;
+  }
+  return true;
+}
+
+void ChessBoard::handleInvalidMove
   (int returnCode, Piece* piece, string sourceFileRank, string destFileRank) {
 
   errorHandler->printErr(returnCode, piece, sourceFileRank, destFileRank);
@@ -189,7 +190,6 @@ bool ChessBoard::kingIsSafeFromRivalry
   (bool isWhiteTurn, Board* board) {
 
   Piece* kingToBeExamined = findPlayersKing (isWhiteTurn, board) ;
-  
   string kingFileRank = kingToBeExamined -> getFileRank ();
 
   for (Board::const_iterator it = board -> cbegin (); 
@@ -203,6 +203,54 @@ bool ChessBoard::kingIsSafeFromRivalry
     }
   }
   return true;
+}
+
+bool ChessBoard::playerHaveValidMove
+  (bool isWhiteTurn, Board* board) {
+
+  for (Board::const_iterator it = board -> cbegin (); 
+       it != board -> cend (); ++it) {
+
+    Piece* possiblePiece = it -> second;
+    string possibleSource = possiblePiece -> getFileRank();
+
+    if (possiblePiece -> isWhitePlayer() == isWhiteTurn) {
+
+      for (char i = ChessInfo::MIN_FILE ; i <= ChessInfo::MAX_FILE; i++) {
+        for (char j = ChessInfo::MIN_RANK; j <= ChessInfo::MAX_RANK; j++) {
+
+          string possibleDest ({ i, j });
+          if (possiblePiece -> isValidMove (possibleDest, board)
+                == ChessErrHandler::NO_ERROR) {
+
+            Board* sandboxBoard = cloneBoard (board);
+            tryMoveAndReturnCaptured 
+              (possibleSource, possibleDest, sandboxBoard);
+
+            if (kingIsSafeFromRivalry (isWhiteTurn, sandboxBoard)) {
+              return true;
+            }
+          }
+        }
+      }
+    }
+  }
+  return false;
+}
+
+Piece* ChessBoard::findPlayersKing (bool isWhiteTurn, Board* board) {
+  for (Board::const_iterator it = board -> cbegin ();
+       it != board -> cend (); it++) {
+    Piece* possiblePiece = it -> second;
+    if (possiblePiece -> isWhitePlayer () == isWhiteTurn &&
+        ((isWhiteTurn && 
+         possiblePiece -> toString ().compare("White's King") == 0) ||
+        (!(isWhiteTurn) &&
+         possiblePiece -> toString ().compare("Black's King") == 0))) {
+      return possiblePiece;
+    }
+  }
+  return NULL;
 }
 
 Piece* ChessBoard::tryMoveAndReturnCaptured
@@ -241,52 +289,6 @@ void ChessBoard::confirmMove (Piece* movingPiece,
 void ChessBoard::switchPlayers() {
   isWhiteTurn = !(isWhiteTurn);
 }
-
-bool ChessBoard::playerHaveValidMove
-  (bool isWhiteTurn, Board* board) {
-
-  for (Board::const_iterator it = board -> cbegin (); 
-       it != board -> cend (); ++it) {
-
-    Piece* possiblePiece = it -> second;
-    string possibleSource = possiblePiece -> getFileRank();
-
-    if (possiblePiece -> isWhitePlayer() == isWhiteTurn) {
-      for (char i = ChessInfo::MIN_FILE ; i <= ChessInfo::MAX_FILE; i++) {
-        for (char j = ChessInfo::MIN_RANK; j <= ChessInfo::MAX_RANK; j++) {
-          string possibleDest ({ i, j });
-          if (possiblePiece -> isValidMove (possibleDest, board)
-                == ChessErrHandler::NO_ERROR) {
-            Board* sandboxBoard = cloneBoard (board);
-            tryMoveAndReturnCaptured (possibleSource, possibleDest, sandboxBoard);
-            if (kingIsSafeFromRivalry (isWhiteTurn, sandboxBoard)) {
-              return true;
-            }
-          }
-        }
-      }
-
-    }
-  }
-  return false;
-
-}
-
-Piece* ChessBoard::findPlayersKing (bool isWhiteTurn, Board* board) {
-  for (Board::const_iterator it = board -> cbegin ();
-       it != board -> cend (); it++) {
-    Piece* possiblePiece = it -> second;
-    if (possiblePiece -> isWhitePlayer () == isWhiteTurn &&
-        ((isWhiteTurn && 
-         possiblePiece -> toString ().compare("White's King") == 0) ||
-        (!(isWhiteTurn) &&
-         possiblePiece -> toString ().compare("Black's King") == 0))) {
-      return possiblePiece;
-    }
-  }
-  return NULL;
-}
-
 
 // deep cloning for board at map
 Board* ChessBoard::cloneBoard (Board* board) {

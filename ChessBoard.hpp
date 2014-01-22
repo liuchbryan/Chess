@@ -56,24 +56,25 @@ class ChessBoard {
 
     bool sourceAndDestIsValid (string sourceFileRank, string destFileRank);
     bool withinChessBoard (string fileRank);
-
     bool sourceIsNotEmpty (string sourceFileRank);
     bool isCurrentPlayerPiece (Piece* piece);
+    bool pieceMoveIsValid (int returnCode, Piece* piece, 
+                           string sourceFileRank, string destFileRank);
     void handleInvalidMove (int returnCode, Piece* piece, 
-      string sourceFileRank, string destFileRank);
+                            string sourceFileRank, string destFileRank);
 
     bool kingIsSafeFromRivalry 
       (bool isWhiteTurn, map<string, Piece*>* board);
+    bool playerHaveValidMove (bool isWhiteTurn, Board* board);
+    Piece* findPlayersKing (bool isWhiteTurn, Board* board);
 
-    Piece* tryMoveAndReturnCaptured (string sourceFileRank, string destFileRank, Board* board);
-    void confirmMove (Piece* movingPiece, 
-  string sourceFileRank, string destFileRank, Board* board);
+    Piece* tryMoveAndReturnCaptured (string sourceFileRank, 
+                                     string destFileRank, Board* board);
+    void confirmMove (Piece* movingPiece, string sourceFileRank, 
+                      string destFileRank, Board* board);
 
     void switchPlayers ();
 
-    bool playerHaveValidMove (bool isWhiteTurn, Board* board);
-  
-    Piece* findPlayersKing (bool isWhiteTurn, Board* board);
     Board* cloneBoard (Board* board);
 
     void printMove (Piece* piece, string sourceFileRank, string destFileRank);
