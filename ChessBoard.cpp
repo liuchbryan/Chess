@@ -11,12 +11,14 @@
 using namespace std;
 
 ChessBoard::ChessBoard() {
-  errorHandler = new ChessErrHandler();
+  board = new Board ();
+  errorHandler = new ChessErrHandler ();
   resetBoard();
 }
 
 ChessBoard::~ChessBoard() {
-  cout << "TODO: implement ChessBoard deconstructor" << endl;
+  delete board;
+  delete errorHandler;
 }
 
 void ChessBoard::submitMove(const char* fromSquare, const char* toSquare){
@@ -70,8 +72,9 @@ void ChessBoard::submitMove(const char* fromSquare, const char* toSquare){
 void ChessBoard::resetBoard(){
   // apprently we need to delete recursively all the pieces within the map
   // leave it to later stage then
-
+  delete board;
   board = new Board;
+
   isWhiteTurn = true;
   isInCheck = false;
   hasEnded = false;
@@ -319,7 +322,6 @@ void ChessBoard::printCheck () {
 void ChessBoard::printCheckmate (bool isWhiteTurn) {
   cout << "Checkmate! " << (isWhiteTurn? "White" : "Black")
        << " loses." << endl;
-
 }
 
 void ChessBoard::printStalemate () {

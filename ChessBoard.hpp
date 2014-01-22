@@ -36,9 +36,6 @@ class ChessBoard {
     Board* board;
     ChessErrHandler* errorHandler;
 
-    Piece* whiteKing;
-    Piece* blackKing;
-
     bool isWhiteTurn = true;
     bool isInCheck = false;
     bool hasEnded = false;
@@ -48,7 +45,6 @@ class ChessBoard {
     ~ChessBoard();
 
     void resetBoard();
-
     void submitMove(const char* fromSquare, const char* toSquare);
 
   private:
