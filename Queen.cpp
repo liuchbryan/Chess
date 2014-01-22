@@ -8,6 +8,10 @@ Queen::Queen (string fileRank, bool isWhitePlayer)
 
 }
 
+Queen* Queen::clone () {
+  return new Queen (this -> getFileRank(), this -> isWhitePlayer());
+}
+
 /* A Queen's move is valid iff:
    - Destination is on the same file/rank/diagonal (note: mutually exclusive)
    - There are no other pieces in intermediate spaces

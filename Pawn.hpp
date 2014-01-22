@@ -19,6 +19,8 @@ class Pawn : public Piece {
 
   public:
     Pawn (string fileRank, bool isWhitePlayer);
+    Pawn* clone ();
+
     int isValidMove (string destFileRank, map<string, Piece*>* board);
     string toString ();
   

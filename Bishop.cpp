@@ -8,6 +8,10 @@ Bishop::Bishop (string fileRank, bool isWhitePlayer)
 
 }
 
+Bishop* Bishop::clone () {
+  return new Bishop (this -> getFileRank(), this -> isWhitePlayer());
+}
+
 /* A Bishop's move is valid iff:
    - The destination is on the same diagonal as its current position
    - There is no obstruction (any piece) in intermediate squares

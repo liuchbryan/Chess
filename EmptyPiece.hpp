@@ -12,6 +12,8 @@ class EmptyPiece : public Piece {
 
   public:
     EmptyPiece (string fileRank, bool isWhitePlayer);
+    EmptyPiece* clone ();
+
     int isValidMove (string destFileRank, map<string, Piece*>* board);
     string toString ();
 

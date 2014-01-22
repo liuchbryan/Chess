@@ -28,10 +28,12 @@
 
 using namespace std;
 
+typedef map<string, Piece*> Board;
+
 class ChessBoard {
 
   private:
-    map<string, Piece*>* board;
+    Board* board;
     ChessErrHandler* errorHandler;
 
     Piece* whiteKing;
@@ -50,31 +52,37 @@ class ChessBoard {
     void submitMove(const char* fromSquare, const char* toSquare);
 
   private:
-    bool sourceAndDestIsValid (string sourceFileRank, string destFileRank);
-    bool withinChessBoard (string destFileRank);
+    bool gameCanContinue (string sourceFileRank, string destFileRank);
 
-    bool sourceIsNotEmpty (string fileRank);
+    bool sourceAndDestIsValid (string sourceFileRank, string destFileRank);
+    bool withinChessBoard (string fileRank);
+
+    bool sourceIsNotEmpty (string sourceFileRank);
     bool isCurrentPlayerPiece (Piece* piece);
     void handleInvalidMove (int returnCode, Piece* piece, 
       string sourceFileRank, string destFileRank);
 
     bool kingIsSafeFromRivalry 
-      (Piece* kingToBeExamined, map<string, Piece*>* board);
+      (bool isWhiteTurn, map<string, Piece*>* board);
 
-    Piece* tryMoveAndReturnCaptured (Piece* piece, string sourceFileRank,
-      string destFileRank, map<string, Piece*>* board);
-    void reverseMove (Piece* movingPiece, string sourceFileRank,
-      Piece* capturedPiece, string destFileRank, map<string, Piece*>* board);
+    Piece* tryMoveAndReturnCaptured (string sourceFileRank, string destFileRank, Board* board);
+    void confirmMove (Piece* movingPiece, 
+  string sourceFileRank, string destFileRank, Board* board);
 
     void switchPlayers ();
 
-    bool playerHaveValidMove (Piece* currPlayerKing, map<string, Piece*>* board);
+    bool playerHaveValidMove (bool isWhiteTurn, Board* board);
+  
+    Piece* findPlayersKing (bool isWhiteTurn, Board* board);
+    Board* cloneBoard (Board* board);
 
     void printMove (Piece* piece, string sourceFileRank, string destFileRank);
     void printCapture (Piece* capturedPiece);
     void printCheck ();
     void printCheckmate (bool isWhitePlayer);
     void printStalemate ();
+
+    void printBoard (Board* board);
 };
 
 #endif

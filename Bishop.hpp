@@ -18,6 +18,8 @@ class Bishop : public Piece {
 
   public:
     Bishop (string fileRank, bool isWhitePlayer);
+    Bishop* clone ();
+
     int isValidMove (string destFileRank, map<string, Piece*>* board);
     string toString ();
 };

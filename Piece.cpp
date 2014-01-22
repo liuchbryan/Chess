@@ -21,7 +21,8 @@ void Piece::updateFileRank (string fileRank) {
   rank = fileRank.at(ChessInfo::RANK_INDEX);
 }
 
-void Piece::confirmMove () {
+void Piece::confirmMove (string destFileRank) {
+  this -> updateFileRank (destFileRank);
   isFirstMove = false;
 }
 

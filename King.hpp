@@ -19,6 +19,8 @@ class King : public Piece {
 
   public:
     King (string fileRank, bool isWhitePlayer);
+    King* clone ();
+
     int isValidMove (string destFileRank, map<string, Piece*>* board);
     string toString ();
   

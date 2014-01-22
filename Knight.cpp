@@ -8,6 +8,10 @@ Knight::Knight (string fileRank, bool isWhitePlayer)
 
 }
 
+Knight* Knight::clone () {
+  return new Knight (this -> getFileRank (), this -> isWhitePlayer ());
+}
+
 /* A Knight's move is valid iff:
    - It moves in "L"-pattern
    - The (possibly) existing piece on destination square is not a friendly

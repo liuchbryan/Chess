@@ -65,7 +65,7 @@ void ChessErrHandler::printErr
       break;
     }
     case ChessErrHandler::GAME_HAS_ENDED : {
-      cout << "The game has ended!" << endl;
+      cout << "The game has ended! What are you still doing here?" << endl;
       break;
     }
     

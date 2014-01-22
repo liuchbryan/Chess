@@ -8,6 +8,10 @@ Rook::Rook (string fileRank, bool isWhitePlayer)
 
 }
 
+Rook* Rook::clone () {
+  return new Rook (this -> getFileRank(), this -> isWhitePlayer());
+}
+
 /* A Rook's move is valid iff:
    - Destination is on the same file/rank (note: mutually exclusive)
    - There are no other pieces in intermediate spaces

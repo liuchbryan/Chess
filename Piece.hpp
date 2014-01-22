@@ -28,10 +28,11 @@ class Piece {
 
   public:
     Piece (string fileRank, bool isWhitePlayer);
+    virtual Piece* clone () = 0;
 
     string getFileRank ();
     void updateFileRank (string fileRank);
-    void confirmMove ();
+    void confirmMove (string destFileRank);
 
     bool isWhitePlayer ();
 

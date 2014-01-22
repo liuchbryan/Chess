@@ -8,6 +8,10 @@ King::King (string fileRank, bool isWhitePlayer)
 
 }
 
+King* King::clone () {
+  return new King (this -> getFileRank (), this -> isWhitePlayer ());
+}
+
 /* A King's move is valid iff:
    - The destination is on its adjacent square
    - The (possibly) existing piece at destination is not a friendly

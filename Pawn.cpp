@@ -8,6 +8,10 @@ Pawn::Pawn (string fileRank, bool isWhitePlayer)
 
 }
 
+Pawn* Pawn::clone () {
+  return new Pawn (this -> getFileRank(), this -> isWhitePlayer());
+}
+
 /* A Pawn has the following valid moves:
    Move vertically (advance in rank in same file): 
    Allow to advance 2 ranks iff 

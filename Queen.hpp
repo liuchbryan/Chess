@@ -18,6 +18,8 @@ class Queen : public Piece {
 
   public:
     Queen (string fileRank, bool isWhitePlayer);
+    Queen* clone ();
+
     int isValidMove (string destFileRank, map<string, Piece*>* board);
     string toString ();
 };

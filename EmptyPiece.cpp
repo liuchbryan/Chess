@@ -6,6 +6,10 @@ EmptyPiece::EmptyPiece (string fileRank, bool isWhitePlayer)
 
 }
 
+EmptyPiece* EmptyPiece::clone () {
+  return new EmptyPiece (this -> getFileRank (), this -> isWhitePlayer ());
+}
+
 int EmptyPiece::isValidMove (string destFileRank, map<string, Piece*>* board) {
   return ChessErrHandler::MOVED_EMPTY_PIECE;
 }
