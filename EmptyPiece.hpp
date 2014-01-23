@@ -11,10 +11,11 @@ using namespace std;
 class EmptyPiece : public Piece {
 
   public:
-    EmptyPiece (string fileRank, bool isWhitePlayer);
+    EmptyPiece (bool isWhitePlayer);
     EmptyPiece* clone ();
 
-    int isValidMove (string destFileRank, map<string, Piece*>* board);
+    int isValidMove 
+      (string sourceFileRank, string destFileRank, map<string, Piece*>* board);
     string toString ();
     string toGraphics ();
 };

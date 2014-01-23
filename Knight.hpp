@@ -18,15 +18,16 @@
 class Knight : public Piece {
 
   public:
-    Knight (string fileRank, bool isWhitePlayer);
+    Knight (bool isWhitePlayer);
     Knight* clone ();
 
-    int isValidMove (string destFileRank, map<string, Piece*>* board);
+    int isValidMove 
+      (string sourceFileRank, string destFileRank, map<string, Piece*>* board);
     string toString ();
     string toGraphics ();
   
   private:
-    bool movesInLShape (string destFileRank);
+    bool movesInLShape (string sourceFileRank, string destFileRank);
 };
 
 #endif

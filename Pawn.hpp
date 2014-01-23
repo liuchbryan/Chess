@@ -18,15 +18,16 @@
 class Pawn : public Piece {
 
   public:
-    Pawn (string fileRank, bool isWhitePlayer);
+    Pawn (bool isWhitePlayer);
     Pawn* clone ();
 
-    int isValidMove (string destFileRank, map<string, Piece*>* board);
+    int isValidMove 
+      (string sourceFileRank, string destFileRank, map<string, Piece*>* board);
     string toString ();
     string toGraphics ();
   
   private:
-    bool isAdjacentFile (string thatFileRank);
+    bool isAdjacentFile (string sourceFileRank, string destFileRank);
 };
 
 #endif

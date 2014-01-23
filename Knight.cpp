@@ -3,13 +3,12 @@
 
 #include "Knight.hpp"
 
-Knight::Knight (string fileRank, bool isWhitePlayer)
-  : Piece (fileRank, isWhitePlayer) {
+Knight::Knight (bool isWhitePlayer) : Piece (isWhitePlayer) {
 
 }
 
 Knight* Knight::clone () {
-  return new Knight (this -> getFileRank (), this -> isWhitePlayer ());
+  return new Knight (this -> isWhitePlayer ());
 }
 
 /* A Knight's move is valid iff:
@@ -20,13 +19,15 @@ Knight* Knight::clone () {
    Knight.isValidMove() post-cond: retrun 0 if move is valid as above
                                    respective error code otherwise
 */
-int Knight::isValidMove (string destFileRank, map<string, Piece*>* board) {
+int Knight::isValidMove 
+  (string sourceFileRank, string destFileRank, map<string, Piece*>* board) {
 
-  if (isSameFile(destFileRank) && isSameRank(destFileRank)) {
+  if (isSameFile(sourceFileRank, destFileRank) && 
+      isSameRank(sourceFileRank, destFileRank)) {
     return ChessErrHandler::DEST_EQ_SOURCE;
   }
 
-  if (!movesInLShape (destFileRank)) {
+  if (!movesInLShape (sourceFileRank, destFileRank)) {
     return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
   }
 
@@ -56,10 +57,12 @@ string Knight::toGraphics () {
    pre-cond: arg is a valid file & rank representation of a different square
    post-cond: return true iff abs file diff = 2(1) & abs rank diff = 1(2)
 */
-bool Knight::movesInLShape (string destFileRank) {
+bool Knight::movesInLShape (string sourceFileRank, string destFileRank) {
 
+  char sourceFile = sourceFileRank.at(ChessInfo::FILE_INDEX);
+  char sourceRank = sourceFileRank.at(ChessInfo::RANK_INDEX);
   char destFile = destFileRank.at(ChessInfo::FILE_INDEX);
   char destRank = destFileRank.at(ChessInfo::RANK_INDEX);
 
-  return abs (file-destFile) * abs (rank-destRank) == 2;
+  return abs (sourceFile - destFile) * abs (sourceRank - destRank) == 2;
 }

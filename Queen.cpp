@@ -3,13 +3,12 @@
 
 #include "Queen.hpp"
 
-Queen::Queen (string fileRank, bool isWhitePlayer)
-  : Piece (fileRank, isWhitePlayer) {
+Queen::Queen (bool isWhitePlayer) : Piece (isWhitePlayer) {
 
 }
 
 Queen* Queen::clone () {
-  return new Queen (this -> getFileRank(), this -> isWhitePlayer());
+  return new Queen (this -> isWhitePlayer());
 }
 
 /* A Queen's move is valid iff:
@@ -21,14 +20,17 @@ Queen* Queen::clone () {
    Queen.isValidMove() post-cond: return 0 iff move is valid
                                   respective error code otherwise
 */
-int Queen::isValidMove (string destFileRank, map<string, Piece*>* board) {
+int Queen::isValidMove 
+  (string sourceFileRank, string destFileRank, map<string, Piece*>* board) {
 
-  if (isSameFile(destFileRank) && isSameRank(destFileRank)) {
+  if (isSameFile(sourceFileRank, destFileRank) && 
+      isSameRank(sourceFileRank, destFileRank)) {
     return ChessErrHandler::DEST_EQ_SOURCE;
   }
 
-  if (!(isSameFile (destFileRank) || isSameRank (destFileRank) ||
-        isSameDiagonal (destFileRank))) {
+  if (!(isSameFile (sourceFileRank, destFileRank) || 
+        isSameRank (sourceFileRank, destFileRank) ||
+        isSameDiagonal (sourceFileRank, destFileRank))) {
     return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
   }
 
@@ -37,12 +39,12 @@ int Queen::isValidMove (string destFileRank, map<string, Piece*>* board) {
       only after isSame_ is satisfied, preventing breaking pre-cond of
       no_Obstruction methods
   */
-  if ((isSameFile (destFileRank) && 
-       !noVerticalObstruction (destFileRank, board)) ||
-      (isSameRank (destFileRank) &&
-       !noHorizontalObstruction (destFileRank, board)) ||
-      (isSameDiagonal (destFileRank) &&
-       !noDiagonalObstruction (destFileRank, board))) {
+  if ((isSameFile (sourceFileRank, destFileRank) && 
+       !noVerticalObstruction (sourceFileRank, destFileRank, board)) ||
+      (isSameRank (sourceFileRank, destFileRank) &&
+       !noHorizontalObstruction (sourceFileRank, destFileRank, board)) ||
+      (isSameDiagonal (sourceFileRank, destFileRank) &&
+       !noDiagonalObstruction (sourceFileRank, destFileRank, board))) {
     return ChessErrHandler::OBSTRUCTION_EN_ROUTE;
   }
   

@@ -17,10 +17,11 @@
 class Rook : public Piece {
 
   public:
-    Rook (string fileRank, bool isWhitePlayer);
+    Rook (bool isWhitePlayer);
     Rook* clone ();
 
-    int isValidMove (string destFileRank, map<string, Piece*>* board);
+    int isValidMove 
+      (string sourceFileRank, string destFileRank, map<string, Piece*>* board);
     string toString ();
     string toGraphics ();
 };

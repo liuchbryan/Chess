@@ -3,13 +3,12 @@
 
 #include "Rook.hpp"
 
-Rook::Rook (string fileRank, bool isWhitePlayer)
-  : Piece (fileRank, isWhitePlayer) {
+Rook::Rook (bool isWhitePlayer) : Piece (isWhitePlayer) {
 
 }
 
 Rook* Rook::clone () {
-  return new Rook (this -> getFileRank(), this -> isWhitePlayer());
+  return new Rook (this -> isWhitePlayer());
 }
 
 /* A Rook's move is valid iff:
@@ -21,13 +20,16 @@ Rook* Rook::clone () {
    Rook.isValidMove() post-cond: return 0 iff move is valid
                                  respective error code otherwise
 */
-int Rook::isValidMove (string destFileRank, map<string, Piece*>* board) {
+int Rook::isValidMove 
+  (string sourceFileRank, string destFileRank, map<string, Piece*>* board) {
 
-  if (isSameFile(destFileRank) && isSameRank(destFileRank)) {
+  if (isSameFile(sourceFileRank, destFileRank) && 
+      isSameRank(sourceFileRank, destFileRank)) {
     return ChessErrHandler::DEST_EQ_SOURCE;
   }
 
-  if (!(isSameFile (destFileRank) || isSameRank (destFileRank))) {
+  if (!(isSameFile (sourceFileRank, destFileRank) || 
+        isSameRank (sourceFileRank, destFileRank))) {
     return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
   }
 
@@ -35,10 +37,10 @@ int Rook::isValidMove (string destFileRank, map<string, Piece*>* board) {
      Lazy boolean evalution of C++ ensure !no_Obstruction is evaluated only
       after satisfying isSame_, prevents breaking pre-cond of no_Obstruction
   */
-  if ((isSameFile (destFileRank) && 
-       !noVerticalObstruction (destFileRank, board)) ||
-      (isSameRank (destFileRank) &&
-       !noHorizontalObstruction (destFileRank, board))) {
+  if ((isSameFile (sourceFileRank, destFileRank) && 
+       !noVerticalObstruction (sourceFileRank, destFileRank, board)) ||
+      (isSameRank (sourceFileRank, destFileRank) &&
+       !noHorizontalObstruction (sourceFileRank, destFileRank, board))) {
     return ChessErrHandler::OBSTRUCTION_EN_ROUTE;
   }
   

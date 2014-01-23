@@ -30,9 +30,9 @@ void ChessBoard::submitMove(const char* fromSquare, const char* toSquare){
   if (!sourceIsNotEmpty (sourceFileRank)) return;
 
   Piece* piece = board->at(sourceFileRank);
-  if (!isCurrentPlayerPiece (piece)) return;
+  if (!isCurrentPlayerPiece (piece, sourceFileRank)) return;
 
-  int returnCode = piece -> isValidMove (destFileRank, board);
+  int returnCode = piece -> isValidMove (sourceFileRank, destFileRank, board);
   if (!pieceMoveIsValid (returnCode, piece, sourceFileRank, destFileRank)) 
     return;
   
@@ -45,7 +45,7 @@ void ChessBoard::submitMove(const char* fromSquare, const char* toSquare){
     return;
   }
 
-  confirmMove (piece, sourceFileRank, destFileRank, board);
+  confirmMove (sourceFileRank, destFileRank, board);
   isInCheck = false;
 
   printMove (piece, sourceFileRank, destFileRank);
@@ -86,29 +86,29 @@ void ChessBoard::resetBoard(){
     fileRank.front() = i;
 
     fileRank.back() = ChessInfo::WHITE_INIT_PAWN_RANK;
-    board->insert ({fileRank, new Pawn (fileRank, true)});
+    board->insert ({fileRank, new Pawn (true)});
 
     fileRank.back() = ChessInfo::BLACK_INIT_PAWN_RANK;
-    board->insert ({fileRank, new Pawn (fileRank, false)});
+    board->insert ({fileRank, new Pawn (false)});
   }
 
-  board->insert ({string("A1"), new Rook (string("A1"), true)});
-  board->insert ({string("B1"), new Knight (string("B1"), true)});
-  board->insert ({string("C1"), new Bishop (string("C1"), true)});
-  board->insert ({string("D1"), new Queen (string("D1"), true)});
-  board->insert ({string("E1"), new King (string("E1"), true)});
-  board->insert ({string("F1"), new Bishop (string("F1"), true)});
-  board->insert ({string("G1"), new Knight (string("G1"), true)});
-  board->insert ({string("H1"), new Rook (string("H1"), true)});
+  board->insert ({string("A1"), new Rook (true)});
+  board->insert ({string("B1"), new Knight (true)});
+  board->insert ({string("C1"), new Bishop (true)});
+  board->insert ({string("D1"), new Queen (true)});
+  board->insert ({string("E1"), new King (true)});
+  board->insert ({string("F1"), new Bishop (true)});
+  board->insert ({string("G1"), new Knight (true)});
+  board->insert ({string("H1"), new Rook (true)});
 
-  board->insert ({string("A8"), new Rook (string("A8"), false)});
-  board->insert ({string("B8"), new Knight (string("B8"), false)});
-  board->insert ({string("C8"), new Bishop (string("C8"), false)});
-  board->insert ({string("D8"), new Queen (string("D8"), false)});
-  board->insert ({string("E8"), new King (string("E8"), false)});
-  board->insert ({string("F8"), new Bishop (string("F8"), false)});
-  board->insert ({string("G8"), new Knight (string("G8"), false)});
-  board->insert ({string("H8"), new Rook (string("H8"), false)});
+  board->insert ({string("A8"), new Rook (false)});
+  board->insert ({string("B8"), new Knight (false)});
+  board->insert ({string("C8"), new Bishop (false)});
+  board->insert ({string("D8"), new Queen (false)});
+  board->insert ({string("E8"), new King (false)});
+  board->insert ({string("F8"), new Bishop (false)});
+  board->insert ({string("G8"), new Knight (false)});
+  board->insert ({string("H8"), new Rook (false)});
 
   cout << "Let the game begin..." << endl;
 }
@@ -118,7 +118,7 @@ void ChessBoard::resetBoard(){
 bool ChessBoard::gameCanContinue (string sourceFileRank, string destFileRank) {
   if (hasEnded) {
     errorHandler -> printErr (ChessErrHandler::GAME_HAS_ENDED,
-                              new EmptyPiece(sourceFileRank, true),
+                              new EmptyPiece(true),
                               sourceFileRank, destFileRank);
     return false;
   }
@@ -130,14 +130,14 @@ bool ChessBoard::sourceAndDestIsValid
 
   if (!withinChessBoard(sourceFileRank)) {
     errorHandler->printErr(ChessErrHandler::SOURCE_OUTOF_BOUND,
-                           new EmptyPiece(sourceFileRank, true),
+                           new EmptyPiece(true),
                            sourceFileRank, destFileRank);
     return false;
   }
 
   if (!withinChessBoard(destFileRank)) {
     errorHandler->printErr(ChessErrHandler::DEST_OUTOF_BOUND,
-                           new EmptyPiece(destFileRank, true),
+                           new EmptyPiece(true),
                            sourceFileRank, destFileRank);
     return false;
   }
@@ -158,19 +158,19 @@ bool ChessBoard::sourceIsNotEmpty (string sourceFileRank) {
     board->at (sourceFileRank);
   } catch (const std::out_of_range &err) {
     errorHandler->printErr(ChessErrHandler::MOVED_EMPTY_PIECE,
-                           new EmptyPiece(sourceFileRank, true), 
+                           new EmptyPiece(true), 
                            sourceFileRank, sourceFileRank); 
     return false;
   }
   return true;
 }
 
-bool ChessBoard::isCurrentPlayerPiece (Piece* piece) {
+bool ChessBoard::isCurrentPlayerPiece (Piece* piece, string sourceFileRank) {
 
   bool isCurrentPlayerPiece = isWhiteTurn == piece -> isWhitePlayer ();
   if (!isCurrentPlayerPiece) {
     errorHandler->printErr(ChessErrHandler::NOT_OWNER_TURN, piece, 
-                           piece -> getFileRank (), piece -> getFileRank ()); 
+                           sourceFileRank, sourceFileRank); 
   }
   return isCurrentPlayerPiece;
 }
@@ -194,16 +194,15 @@ void ChessBoard::handleInvalidMove
 bool ChessBoard::kingIsSafeFromRivalry 
   (bool isWhiteTurn, Board* board) {
 
-  Piece* kingToBeExamined = findPlayersKing (isWhiteTurn, board) ;
-  string kingFileRank = kingToBeExamined -> getFileRank ();
+  string kingFileRank = findPlayersKingFileRank (isWhiteTurn, board) ;
 
   for (Board::const_iterator it = board -> cbegin (); 
        it != board -> cend (); it++) {
+    string challengingFileRank = it -> first;
     Piece* challengingPiece = it -> second;
-    if (challengingPiece != kingToBeExamined &&
-        challengingPiece -> isWhitePlayer () != isWhiteTurn &&
-        challengingPiece -> isValidMove (kingFileRank, board)
-          == ChessErrHandler::NO_ERROR) {
+    if (challengingPiece -> isWhitePlayer () != isWhiteTurn &&
+        challengingPiece -> isValidMove (challengingFileRank, 
+          kingFileRank, board) == ChessErrHandler::NO_ERROR) {
       return false;
     }
   }
@@ -216,8 +215,8 @@ bool ChessBoard::playerHaveValidMove
   for (Board::const_iterator it = board -> cbegin (); 
        it != board -> cend (); ++it) {
 
+    string possibleSource = it -> first;
     Piece* possiblePiece = it -> second;
-    string possibleSource = possiblePiece -> getFileRank();
 
     if (possiblePiece -> isWhitePlayer() == isWhiteTurn) {
 
@@ -225,8 +224,8 @@ bool ChessBoard::playerHaveValidMove
         for (char j = ChessInfo::MIN_RANK; j <= ChessInfo::MAX_RANK; j++) {
 
           string possibleDest ({ i, j });
-          if (possiblePiece -> isValidMove (possibleDest, board)
-                == ChessErrHandler::NO_ERROR) {
+          if (possiblePiece -> isValidMove (possibleSource, 
+                possibleDest, board) == ChessErrHandler::NO_ERROR) {
 
             Board* sandboxBoard = cloneBoard (board);
             tryMoveAndReturnCaptured 
@@ -243,16 +242,17 @@ bool ChessBoard::playerHaveValidMove
   return false;
 }
 
-Piece* ChessBoard::findPlayersKing (bool isWhiteTurn, Board* board) {
+string ChessBoard::findPlayersKingFileRank (bool isWhiteTurn, Board* board) {
   for (Board::const_iterator it = board -> cbegin ();
        it != board -> cend (); it++) {
+    string possibleFileRank = it -> first;
     Piece* possiblePiece = it -> second;
     if (possiblePiece -> isWhitePlayer () == isWhiteTurn &&
         ((isWhiteTurn && 
          possiblePiece -> toString ().compare("White's King") == 0) ||
         (!(isWhiteTurn) &&
          possiblePiece -> toString ().compare("Black's King") == 0))) {
-      return possiblePiece;
+      return possibleFileRank;
     }
   }
   return NULL;
@@ -271,15 +271,15 @@ Piece* ChessBoard::tryMoveAndReturnCaptured
     board -> insert ({ destFileRank, sourcePiece });
   }
   
-  sourcePiece -> updateFileRank (destFileRank);
   board -> erase (sourceFileRank);
 
   return destPiece;
 }
 
-void ChessBoard::confirmMove (Piece* movingPiece, 
-  string sourceFileRank, string destFileRank, Board* board) {
+void ChessBoard::confirmMove 
+  (string sourceFileRank, string destFileRank, Board* board) {
 
+  Piece* movingPiece = board -> at (sourceFileRank);
   try {
     board -> at (destFileRank) = movingPiece;
   } catch (const std::out_of_range &err) {
@@ -288,7 +288,6 @@ void ChessBoard::confirmMove (Piece* movingPiece,
 
   movingPiece -> confirmMove (destFileRank);
   board -> erase (sourceFileRank);
-
 }
 
 void ChessBoard::switchPlayers() {

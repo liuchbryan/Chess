@@ -17,10 +17,11 @@
 class Queen : public Piece {
 
   public:
-    Queen (string fileRank, bool isWhitePlayer);
+    Queen (bool isWhitePlayer);
     Queen* clone ();
 
-    int isValidMove (string destFileRank, map<string, Piece*>* board);
+    int isValidMove 
+      (string sourceFileRank, string destFileRank, map<string, Piece*>* board);
     string toString ();
     string toGraphics ();
 };

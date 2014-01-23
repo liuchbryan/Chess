@@ -3,13 +3,13 @@
 
 #include "Pawn.hpp"
 
-Pawn::Pawn (string fileRank, bool isWhitePlayer)
-  : Piece (fileRank, isWhitePlayer) {
+Pawn::Pawn (bool isWhitePlayer)
+  : Piece (isWhitePlayer) {
 
 }
 
 Pawn* Pawn::clone () {
-  return new Pawn (this -> getFileRank(), this -> isWhitePlayer());
+  return new Pawn (this -> isWhitePlayer());
 }
 
 /* A Pawn has the following valid moves:
@@ -28,9 +28,11 @@ Pawn* Pawn::clone () {
    Pawn.isValidMove() post-cond: retrun 0 if move is valid as above
                                  respective error code otherwise
 */
-int Pawn::isValidMove (string destFileRank, map<string, Piece*>* board) {
+int Pawn::isValidMove 
+  (string sourceFileRank, string destFileRank, map<string, Piece*>* board) {
 
-  if (isSameFile(destFileRank) && isSameRank(destFileRank)) {
+  if (isSameFile(sourceFileRank, destFileRank) && 
+      isSameRank(sourceFileRank, destFileRank)) {
     return ChessErrHandler::DEST_EQ_SOURCE;
   }
   
@@ -38,16 +40,17 @@ int Pawn::isValidMove (string destFileRank, map<string, Piece*>* board) {
      with calculations depending on which side it belongs
   */
   char destRank = destFileRank.at (ChessInfo::RANK_INDEX);
+  char sourceRank = sourceFileRank.at(ChessInfo::RANK_INDEX);
   int rankAdvancement =
-    _isWhitePlayer ? destRank - rank : rank - destRank;
+    _isWhitePlayer ? destRank - sourceRank : sourceRank - destRank;
 
-  if (isSameFile (destFileRank)) {
+  if (isSameFile (sourceFileRank, destFileRank)) {
     switch (rankAdvancement) {
       case 2: {
         if (!isFirstMove) {
           return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
         }
-        if (!noVerticalObstruction (destFileRank, board)) {
+        if (!noVerticalObstruction (sourceFileRank, destFileRank, board)) {
           return ChessErrHandler::OBSTRUCTION_EN_ROUTE;
         }
         break;
@@ -73,7 +76,8 @@ int Pawn::isValidMove (string destFileRank, map<string, Piece*>* board) {
   } else {
 
     try {
-      if (!(rankAdvancement == 1 && isAdjacentFile (destFileRank) &&
+      if (!(rankAdvancement == 1 && 
+            isAdjacentFile (sourceFileRank, destFileRank) &&
             !isFriendly (board -> at (destFileRank)))) {
         return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
       }
@@ -105,8 +109,9 @@ string Pawn::toGraphics () {
    pre-cond: arg is a valid file & rank representation of a different square
    post-cond: return true iff absolute file difference is 1
 */
-bool Pawn::isAdjacentFile (string thatFileRank) {
+bool Pawn::isAdjacentFile (string sourceFileRank, string destFileRank) {
 
-  char thatFile = thatFileRank.at (ChessInfo::FILE_INDEX);
-  return abs (thatFile - file) == 1;
+  char sourceFile = sourceFileRank.at(ChessInfo::FILE_INDEX);
+  char destFile = destFileRank.at (ChessInfo::FILE_INDEX);
+  return abs (destFile - sourceFile) == 1;
 }

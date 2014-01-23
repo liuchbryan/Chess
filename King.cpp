@@ -3,13 +3,12 @@
 
 #include "King.hpp"
 
-King::King (string fileRank, bool isWhitePlayer)
-  : Piece (fileRank, isWhitePlayer) {
+King::King (bool isWhitePlayer) : Piece (isWhitePlayer) {
 
 }
 
 King* King::clone () {
-  return new King (this -> getFileRank (), this -> isWhitePlayer ());
+  return new King (this -> isWhitePlayer ());
 }
 
 /* A King's move is valid iff:
@@ -20,13 +19,15 @@ King* King::clone () {
    King.isValidMove() post-cond: retrun 0 if move is valid as above
                                  respective error code otherwise
 */
-int King::isValidMove (string destFileRank, map<string, Piece*>* board) {
+int King::isValidMove 
+  (string sourceFileRank, string destFileRank, map<string, Piece*>* board) {
 
-  if (isSameFile(destFileRank) && isSameRank(destFileRank)) {
+  if (isSameFile(sourceFileRank, destFileRank) && 
+      isSameRank(sourceFileRank, destFileRank)) {
     return ChessErrHandler::DEST_EQ_SOURCE;
   }
   
-  if (!isAdjacentSquare (destFileRank)) {
+  if (!isAdjacentSquare (sourceFileRank, destFileRank)) {
     return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
   }
 
@@ -55,10 +56,12 @@ string King::toGraphics () {
    pre-cond: arg is valid file & rank representation of a different square
    post-cond: return true iff the displacement of file and rank is at most 1
 */
-bool King::isAdjacentSquare (string thatFileRank) {
-  
-  char thatFile = thatFileRank.at(ChessInfo::FILE_INDEX);
-  char thatRank = thatFileRank.at(ChessInfo::RANK_INDEX);
+bool King::isAdjacentSquare (string sourceFileRank, string destFileRank) {
 
-  return max (abs (thatFile - file), abs (thatRank - rank)) == 1;
+  char sourceFile = sourceFileRank.at(ChessInfo::FILE_INDEX);
+  char sourceRank = sourceFileRank.at(ChessInfo::RANK_INDEX);  
+  char destFile = destFileRank.at(ChessInfo::FILE_INDEX);
+  char destRank = destFileRank.at(ChessInfo::RANK_INDEX);
+
+  return max (abs (destFile - sourceFile), abs (destRank - sourceRank)) == 1;
 }

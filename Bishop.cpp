@@ -3,13 +3,12 @@
 
 #include "Bishop.hpp"
 
-Bishop::Bishop (string fileRank, bool isWhitePlayer)
-  : Piece (fileRank, isWhitePlayer) {
+Bishop::Bishop (bool isWhitePlayer) : Piece (isWhitePlayer) {
 
 }
 
 Bishop* Bishop::clone () {
-  return new Bishop (this -> getFileRank(), this -> isWhitePlayer());
+  return new Bishop (this -> isWhitePlayer());
 }
 
 /* A Bishop's move is valid iff:
@@ -21,17 +20,19 @@ Bishop* Bishop::clone () {
    Bishop.isValidMove() post-cond: retrun 0 if move is valid as above
                                    respective error code otherwise
 */
-int Bishop::isValidMove (string destFileRank, map<string, Piece*>* board) {
+int Bishop::isValidMove
+  (string sourceFileRank, string destFileRank, map<string, Piece*>* board) {
 
-  if (isSameFile(destFileRank) && isSameRank(destFileRank)) {
+  if (isSameFile(sourceFileRank, destFileRank) && 
+      isSameRank(sourceFileRank, destFileRank)) {
     return ChessErrHandler::DEST_EQ_SOURCE;
   }
  
-  if (!isSameDiagonal (destFileRank)) {
+  if (!isSameDiagonal (sourceFileRank, destFileRank)) {
     return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
   }
   
-  if (!noDiagonalObstruction (destFileRank, board)) {
+  if (!noDiagonalObstruction (sourceFileRank, destFileRank, board)) {
     return ChessErrHandler::OBSTRUCTION_EN_ROUTE;
   }
 

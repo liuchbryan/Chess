@@ -5,24 +5,12 @@
 
 #include "Piece.hpp"
 
-Piece::Piece (string fileRank, bool isWhitePlayer){
-  file = fileRank.at(ChessInfo::FILE_INDEX);
-  rank = fileRank.at(ChessInfo::RANK_INDEX);
+Piece::Piece (bool isWhitePlayer){
   _isWhitePlayer = isWhitePlayer;
 }
 
-// Getter and setter for file & rank of a piece
-string Piece::getFileRank () {
-  return string ({ file, rank });
-}
-
-void Piece::updateFileRank (string fileRank) {
-  file = fileRank.at(ChessInfo::FILE_INDEX);
-  rank = fileRank.at(ChessInfo::RANK_INDEX);
-}
 
 void Piece::confirmMove (string destFileRank) {
-  this -> updateFileRank (destFileRank);
   isFirstMove = false;
 }
 
@@ -45,42 +33,44 @@ string Piece::playerToString () {
 }
 
 /* Piece::isSame_ ()
-   Pre-cond.: thatFileRank is a valid file & rank representation
-   Post-cond.: return true iff given file & rank is on the same
-               file/rank/diagonal with this piece
-   (N.B.: same diagonal - abs file difference = abs rank difference)
+   Pre-cond.: 
+   Post-cond.: 
+
 */ 
-bool Piece::isSameFile (string thatFileRank) {
-  char thatFile = thatFileRank.at(ChessInfo::FILE_INDEX);
-  return this->file == thatFile;
+
+bool Piece::isSameFile (string sourceFileRank, string destFileRank) {
+  return sourceFileRank.at(ChessInfo::FILE_INDEX) ==
+         destFileRank.at(ChessInfo::FILE_INDEX);
 }
 
-bool Piece::isSameRank (string thatFileRank) {
-  char thatRank = thatFileRank.at(ChessInfo::RANK_INDEX);
-  return this->rank == thatRank;
+bool Piece::isSameRank (string sourceFileRank, string destFileRank) {
+  return sourceFileRank.at(ChessInfo::RANK_INDEX) ==
+         destFileRank.at(ChessInfo::RANK_INDEX);
+
 }
 
-bool Piece::isSameDiagonal (string thatFileRank) {
-  char thatFile = thatFileRank.at(ChessInfo::FILE_INDEX);
-  char thatRank = thatFileRank.at(ChessInfo::RANK_INDEX);
-  return (abs (this->file - thatFile) == abs (this->rank - thatRank));
+bool Piece::isSameDiagonal (string sourceFileRank, string destFileRank) {
+  return abs (sourceFileRank.at(ChessInfo::FILE_INDEX) -
+              destFileRank.at(ChessInfo::FILE_INDEX)) ==
+         abs (sourceFileRank.at(ChessInfo::RANK_INDEX) -
+              destFileRank.at(ChessInfo::RANK_INDEX));
 }
 
 /* Piece.noVerticalObstruction()
-   Pre-cond.: destFileRank is in the same file and not the same rank as
-              this piece
-   Post-cond.: return true iff there are no piece in between this rank and
-               dest rank (exclusive)
+   Pre-cond.: 
+   Post-cond.:
 */
 bool Piece::noVerticalObstruction 
-  (string destFileRank, map<string, Piece*>* board){
-
+  (string sourceFileRank, string destFileRank, map<string, Piece*>* board){
+  
+  char sourceFile = sourceFileRank.at(ChessInfo::FILE_INDEX);
+  char sourceRank = sourceFileRank.at(ChessInfo::RANK_INDEX);
   char destRank = destFileRank.at(ChessInfo::RANK_INDEX);
-  char lowRank = (rank < destRank) ? rank : destRank;
-  char highRank = (rank < destRank) ? destRank : rank;
+  char lowRank = (sourceRank < destRank) ? sourceRank : destRank;
+  char highRank = (sourceRank < destRank) ? destRank : sourceRank;
 
   for (char i = lowRank + ChessInfo::EXCLUSIVE_SHIFT; i < highRank; i++) {
-    string between ({ file, i });
+    string between ({ sourceFile, i });
     try {
       board -> at(between);
       return false;
@@ -92,19 +82,20 @@ bool Piece::noVerticalObstruction
 }
 
 /* Piece.noHorizontalObstruction()
-   Pre-cond.: destFileRank is in the same rank as this piece
-   Post-cond.: return true iff there are no piece in between this file and
-               dest file (exclusive)
+   Pre-cond.: 
+   Post-cond.: 
 */
 bool Piece::noHorizontalObstruction
-  (string destFileRank, map<string, Piece*>* board){
+  (string sourceFileRank, string destFileRank, map<string, Piece*>* board){
 
+  char sourceFile = sourceFileRank.at(ChessInfo::FILE_INDEX);
+  char sourceRank = sourceFileRank.at(ChessInfo::RANK_INDEX);
   char destFile = destFileRank.at(ChessInfo::FILE_INDEX);
-  char lowFile = (file < destFile) ? file : destFile;
-  char highFile = (file < destFile) ? destFile : file;
+  char lowFile = (sourceFile < destFile) ? sourceFile : destFile;
+  char highFile = (sourceFile < destFile) ? destFile : sourceFile;
 
   for (char i = lowFile + ChessInfo::EXCLUSIVE_SHIFT; i < highFile; i++) {
-    string between ({ i, rank });
+    string between ({ i, sourceRank });
     try {
       board -> at (between);
       return false;
@@ -116,22 +107,23 @@ bool Piece::noHorizontalObstruction
 }
 
 /* Piece.noDiagonalObstruction()
-   Pre-cond.: destFileRank is in the same diagonal as this piece
-   Post-cond.: return true iff there are no piece in between this piece and
-               dest file & rank on the diagonal (exclusive)
+   Pre-cond.: 
+   Post-cond.: 
 */
 bool Piece::noDiagonalObstruction
-  (string destFileRank, map<string, Piece*>* board){
+  (string sourceFileRank, string destFileRank, map<string, Piece*>* board){
 
+  char sourceFile = sourceFileRank.at(ChessInfo::FILE_INDEX);
   char destFile = destFileRank.at(ChessInfo::FILE_INDEX);
-  char lowFile = (file < destFile) ? file : destFile;
-  char highFile = (file < destFile) ? destFile : file;
+  char lowFile = (sourceFile < destFile) ? sourceFile : destFile;
+  char highFile = (sourceFile < destFile) ? destFile : sourceFile;
 
+  char sourceRank = sourceFileRank.at(ChessInfo::RANK_INDEX);
   char destRank = destFileRank.at(ChessInfo::RANK_INDEX);
-  char lowRank = (rank < destRank) ? rank : destRank;
-  char highRank = (rank < destRank) ? destRank : rank;
+  char lowRank = (sourceRank < destRank) ? sourceRank : destRank;
+  char highRank = (sourceRank < destRank) ? destRank : sourceRank;
 
-  bool isPositiveSlope = (destFile - file) == (destRank - rank);
+  bool isPositiveSlope = (destFile - sourceFile) == (destRank - sourceRank);
   string between;
 
   for (int i = ChessInfo::EXCLUSIVE_SHIFT; i < (highFile - lowFile); i++) {

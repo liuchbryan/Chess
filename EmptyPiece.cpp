@@ -1,16 +1,16 @@
 
 #include "EmptyPiece.hpp"
 
-EmptyPiece::EmptyPiece (string fileRank, bool isWhitePlayer) 
-  : Piece(fileRank, isWhitePlayer) {
+EmptyPiece::EmptyPiece (bool isWhitePlayer) : Piece(isWhitePlayer) {
 
 }
 
 EmptyPiece* EmptyPiece::clone () {
-  return new EmptyPiece (this -> getFileRank (), this -> isWhitePlayer ());
+  return new EmptyPiece (this -> isWhitePlayer ());
 }
 
-int EmptyPiece::isValidMove (string destFileRank, map<string, Piece*>* board) {
+int EmptyPiece::isValidMove 
+  (string sourceFileRank, string destFileRank, map<string, Piece*>* board) {
   return ChessErrHandler::MOVED_EMPTY_PIECE;
 }
 

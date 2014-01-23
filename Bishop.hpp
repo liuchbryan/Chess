@@ -17,10 +17,11 @@
 class Bishop : public Piece {
 
   public:
-    Bishop (string fileRank, bool isWhitePlayer);
+    Bishop (bool isWhitePlayer);
     Bishop* clone ();
 
-    int isValidMove (string destFileRank, map<string, Piece*>* board);
+    int isValidMove 
+      (string sourceFileRank, string destFileRank, map<string, Piece*>* board);
     string toString ();
     string toGraphics ();
 };

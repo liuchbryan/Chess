@@ -21,19 +21,14 @@ using namespace std;
 class Piece {
 
   protected:
-    char file;
-    char rank;
     bool _isWhitePlayer;
     bool isFirstMove = true;
 
   public:
-    Piece (string fileRank, bool isWhitePlayer);
+    Piece (bool isWhitePlayer);
     virtual Piece* clone () = 0;
 
-    string getFileRank ();
-    void updateFileRank (string fileRank);
     void confirmMove (string destFileRank);
-
     bool isWhitePlayer ();
 
     /* Piece.isValidMove()
@@ -44,8 +39,8 @@ class Piece {
                    respective error code (defined in ChessErrHandler class)
                      for error reporting otherwise
     */
-    virtual int isValidMove
-      (string destFileRank, map<string, Piece*>* board) = 0;
+    virtual int isValidMove (string sourceFileRank, 
+      string destFileRank, map<string, Piece*>* board) = 0;
 
     string playerToString ();
     // Piece.toString() Post-cond.: return the string rep. of the piece
@@ -55,16 +50,16 @@ class Piece {
   protected:
     bool isFriendly (Piece* that);
 
-    bool isSameFile (string thatFileRank);
-    bool isSameRank (string thatFileRank);
-    bool isSameDiagonal (string thatFileRank);
+    bool isSameFile (string sourceFileRank, string destFileRank);
+    bool isSameRank (string sourceFileRank, string destFileRank);
+    bool isSameDiagonal (string sourceFileRank, string destFileRank);
 
     bool noVerticalObstruction 
-      (string destFileRank, map<string, Piece*>* board);
+      (string sourceFileRank, string destFileRank, map<string, Piece*>* board);
     bool noHorizontalObstruction
-      (string destFileRank, map<string, Piece*>* board);
+      (string sourceFileRank, string destFileRank, map<string, Piece*>* board);
     bool noDiagonalObstruction
-      (string destFileRank, map<string, Piece*>* board);
+      (string sourceFileRank, string destFileRank, map<string, Piece*>* board);
     
     bool destExistFriendlyPiece 
       (string destFileRank, map<string, Piece*>* board);   

@@ -18,15 +18,16 @@
 class King : public Piece {
 
   public:
-    King (string fileRank, bool isWhitePlayer);
+    King (bool isWhitePlayer);
     King* clone ();
 
-    int isValidMove (string destFileRank, map<string, Piece*>* board);
+    int isValidMove 
+      (string sourceFileRank, string destFileRank, map<string, Piece*>* board);
     string toString ();
     string toGraphics ();
   
   private:
-    bool isAdjacentSquare (string thatFileRank);
+    bool isAdjacentSquare (string sourceFileRank, string destFileRank);
 };
 
 #endif
