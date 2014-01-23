@@ -33,7 +33,8 @@ void ChessBoard::submitMove(const char* fromSquare, const char* toSquare){
   if (!isCurrentPlayerPiece (piece)) return;
 
   int returnCode = piece -> isValidMove (destFileRank, board);
-  if (!pieceMoveIsValid (returnCode, piece, sourceFileRank, destFileRank)) return;
+  if (!pieceMoveIsValid (returnCode, piece, sourceFileRank, destFileRank)) 
+    return;
   
   Board* sandboxBoard = cloneBoard (board);
   Piece* capturedPiece 
@@ -331,7 +332,7 @@ void ChessBoard::printStalemate () {
 
 // testing (printing) the state of the chessboard
 void ChessBoard::printBoard (Board* board) {
-  cout << "  -------------------------" << endl;
+  cout << endl << "  +--+--+--+--+--+--+--+--+" << endl;
   for (char i = ChessInfo::MAX_RANK ; i >= ChessInfo::MIN_RANK; i--) {
     cout << i << " ";
     for (char j = ChessInfo::MIN_FILE; j <= ChessInfo::MAX_FILE; j++) {
@@ -344,7 +345,7 @@ void ChessBoard::printBoard (Board* board) {
         cout << "  ";
       }
     }
-    cout << "|" << endl << "  -------------------------" << endl;
+    cout << "|" << endl << "  +--+--+--+--+--+--+--+--+" << endl;
   }
   cout << "    A  B  C  D  E  F  G  H" << endl;
 }
