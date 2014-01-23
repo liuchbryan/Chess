@@ -48,3 +48,10 @@ string Bishop::toString () {
   name.append(" Bishop");
   return name;  
 }
+
+string Bishop::toGraphics () {
+  if (_isWhitePlayer) {
+    return string("♗");
+  }
+  return string("♝");
+}

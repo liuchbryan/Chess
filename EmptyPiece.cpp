@@ -17,3 +17,7 @@ int EmptyPiece::isValidMove (string destFileRank, map<string, Piece*>* board) {
 string EmptyPiece::toString () {
   return string ("Empty Piece");  
 }
+
+string EmptyPiece::toGraphics () {
+  return string (" ");
+}

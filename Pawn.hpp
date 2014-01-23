@@ -23,6 +23,7 @@ class Pawn : public Piece {
 
     int isValidMove (string destFileRank, map<string, Piece*>* board);
     string toString ();
+    string toGraphics ();
   
   private:
     bool isAdjacentFile (string thatFileRank);

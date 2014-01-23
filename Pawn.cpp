@@ -93,6 +93,14 @@ string Pawn::toString () {
   return name;  
 }
 
+string Pawn::toGraphics () {
+
+  if (_isWhitePlayer) {
+    return string("♙");
+  }
+  return string("♟");
+}
+
 /* Pawn.isAdjacentFile(): 
    pre-cond: arg is a valid file & rank representation of a different square
    post-cond: return true iff absolute file difference is 1

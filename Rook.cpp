@@ -55,3 +55,11 @@ string Rook::toString () {
   name.append(" Rook");
   return name;  
 }
+
+string Rook::toGraphics () {
+
+  if (_isWhitePlayer) {
+    return string("♖");
+  }
+  return string("♜");
+}

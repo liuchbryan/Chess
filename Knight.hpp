@@ -23,6 +23,7 @@ class Knight : public Piece {
 
     int isValidMove (string destFileRank, map<string, Piece*>* board);
     string toString ();
+    string toGraphics ();
   
   private:
     bool movesInLShape (string destFileRank);

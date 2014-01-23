@@ -50,6 +50,7 @@ class Piece {
     string playerToString ();
     // Piece.toString() Post-cond.: return the string rep. of the piece
     virtual string toString () = 0;
+    virtual string toGraphics () = 0;
 
   protected:
     bool isFriendly (Piece* that);

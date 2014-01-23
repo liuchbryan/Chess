@@ -59,3 +59,11 @@ string Queen::toString () {
   name.append(" Queen");
   return name;  
 }
+
+string Queen::toGraphics () {
+  
+  if (_isWhitePlayer) {
+    return string("♕");
+  }
+  return string("♛");
+}

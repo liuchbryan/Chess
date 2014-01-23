@@ -44,6 +44,13 @@ string King::toString () {
   return name;  
 }
 
+string King::toGraphics () {
+  if (_isWhitePlayer) {
+    return string("♔");
+  }
+  return string("♚");
+}
+
 /* King.isAdjacentSquare():
    pre-cond: arg is valid file & rank representation of a different square
    post-cond: return true iff the displacement of file and rank is at most 1

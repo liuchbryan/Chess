@@ -6,8 +6,7 @@ using namespace std;
 #include "Piece.hpp"
 
 int main () {
-  Piece* test = new EmptyPiece(string("D4"), true);
-
+/*
 //Expected: 1100
   cout << test->isSameFile('D');
   cout << test->isSameFile('D');
@@ -31,5 +30,18 @@ int main () {
   cout << test->isSameDiagonal('F', '2');
   cout << test->isSameDiagonal('B', '6');
   cout << test->isSameDiagonal('B', '2') << endl;
+*/
+  
+
+}
+
+int testGeneralPiece () {
+
+  Piece* test = new EmptyPiece(string("D4"), true);
+  
+ 
+
+
+
 
 }

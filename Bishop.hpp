@@ -22,6 +22,7 @@ class Bishop : public Piece {
 
     int isValidMove (string destFileRank, map<string, Piece*>* board);
     string toString ();
+    string toGraphics ();
 };
 
 #endif

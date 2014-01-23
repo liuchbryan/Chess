@@ -64,8 +64,9 @@ void ChessBoard::submitMove(const char* fromSquare, const char* toSquare){
       printStalemate () ;
     }
     hasEnded = true;
+    printBoard (board);
   }
-
+  
   switchPlayers();
 }    
 
@@ -328,12 +329,22 @@ void ChessBoard::printStalemate () {
   cout << "Stalemate." << endl;
 }
 
-void ChessBoard::printBoard (Board* board) {
 // testing (printing) the state of the chessboard
-  cout << "Total Number of Squares: " << board->size() << endl;
-  for (Board::iterator it = board->begin();
-       it != board->end(); ++it) {
-    cout << "Square " << it->first << " contains " << it->second->toString() << " at " << it->second->getFileRank() << endl;
+void ChessBoard::printBoard (Board* board) {
+  cout << "  -------------------------" << endl;
+  for (char i = ChessInfo::MAX_RANK ; i >= ChessInfo::MIN_RANK; i--) {
+    cout << i << " ";
+    for (char j = ChessInfo::MIN_FILE; j <= ChessInfo::MAX_FILE; j++) {
+      cout << "|";
+      string fileRank ({ j, i });
+      try {
+        Piece* piece = board -> at (fileRank);
+        cout << piece -> toGraphics () << " ";
+      } catch (const std::out_of_range &err) {
+        cout << "  ";
+      }
+    }
+    cout << "|" << endl << "  -------------------------" << endl;
   }
-// end of testing (printing) the state of chessboard
+  cout << "    A  B  C  D  E  F  G  H" << endl;
 }

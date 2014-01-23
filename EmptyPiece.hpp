@@ -16,9 +16,7 @@ class EmptyPiece : public Piece {
 
     int isValidMove (string destFileRank, map<string, Piece*>* board);
     string toString ();
-
-  private:
-
+    string toGraphics ();
 };
 
 #endif

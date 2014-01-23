@@ -44,6 +44,14 @@ string Knight::toString () {
   return name;  
 }
 
+string Knight::toGraphics () {
+  
+  if (_isWhitePlayer) {
+    return string("♘");
+  }
+  return string("♞");
+}
+
 /* Knight.movesInLShape()
    pre-cond: arg is a valid file & rank representation of a different square
    post-cond: return true iff abs file diff = 2(1) & abs rank diff = 1(2)
