@@ -4,7 +4,7 @@
 #include "King.hpp"
 
 King::King (bool isWhitePlayer) : Piece (isWhitePlayer) {
-
+  _isKing = true;
 }
 
 King* King::clone () {

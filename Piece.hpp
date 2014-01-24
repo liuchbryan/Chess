@@ -22,6 +22,7 @@ class Piece {
 
   protected:
     bool _isWhitePlayer;
+    bool _isKing = false;
     bool isFirstMove = true;
 
   public:
@@ -30,6 +31,7 @@ class Piece {
 
     void confirmMove (string destFileRank);
     bool isWhitePlayer ();
+    bool isKing ();
 
     /* Piece.isValidMove()
        Pre-cond.: destFileRank is a valid file & rank representation
@@ -54,7 +56,7 @@ class Piece {
     bool isSameRank (string sourceFileRank, string destFileRank);
     bool isSameDiagonal (string sourceFileRank, string destFileRank);
 
-    bool noVerticalObstruction 
+    bool noVerticalObstruction
       (string sourceFileRank, string destFileRank, map<string, Piece*>* board);
     bool noHorizontalObstruction
       (string sourceFileRank, string destFileRank, map<string, Piece*>* board);

@@ -248,10 +248,7 @@ string ChessBoard::findPlayersKingFileRank (bool isWhiteTurn, Board* board) {
     string possibleFileRank = it -> first;
     Piece* possiblePiece = it -> second;
     if (possiblePiece -> isWhitePlayer () == isWhiteTurn &&
-        ((isWhiteTurn && 
-         possiblePiece -> toString ().compare("White's King") == 0) ||
-        (!(isWhiteTurn) &&
-         possiblePiece -> toString ().compare("Black's King") == 0))) {
+        possiblePiece -> isKing () == true) {
       return possibleFileRank;
     }
   }

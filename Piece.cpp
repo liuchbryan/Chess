@@ -19,6 +19,10 @@ bool Piece::isWhitePlayer () {
   return (_isWhitePlayer);
 }
 
+bool Piece::isKing () {
+  return _isKing;
+}
+
 /* Piece.isFriendly()
    Pre-cond.: that is a valid reference to a Piece
    Post-cond.: return true iff this and that Piece belongs to same player

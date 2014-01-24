@@ -20,7 +20,7 @@ class King : public Piece {
   public:
     King (bool isWhitePlayer);
     King* clone ();
-
+ 
     int isValidMove 
       (string sourceFileRank, string destFileRank, map<string, Piece*>* board);
     string toString ();
