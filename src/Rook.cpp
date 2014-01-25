@@ -1,7 +1,7 @@
 // Bryan Liu (chl312), Dept. of Computing, Imperial College London
 // Rook.cpp - implementation of Rook extending Piece (info in Rook.hpp)
 
-#include "Rook.hpp"
+#include "header/Rook.hpp"
 
 Rook::Rook (bool isWhitePlayer) : Piece (isWhitePlayer) {
 

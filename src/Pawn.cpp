@@ -1,7 +1,7 @@
 // Bryan Liu (chl312), Dept. of Computing, Imperial College London
 // Pawn.cpp - implementation of Pawn extending Piece (info in Pawn.hpp)
 
-#include "Pawn.hpp"
+#include "header/Pawn.hpp"
 
 Pawn::Pawn (bool isWhitePlayer)
   : Piece (isWhitePlayer) {

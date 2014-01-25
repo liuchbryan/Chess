@@ -1,7 +1,7 @@
 // Bryan Liu (chl312), Dept. of Computing, Imperial College London
 // King.cpp - implementation of King extending Piece (info in King.hpp)
 
-#include "King.hpp"
+#include "header/King.hpp"
 
 King::King (bool isWhitePlayer) : Piece (isWhitePlayer) {
   _isKing = true;

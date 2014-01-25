@@ -10,17 +10,17 @@
 #include <string>
 #include <stdexcept>
 
-#include "ChessErrHandler.hpp"
-#include "ChessInfo.hpp"
+#include "src/header/ChessErrHandler.hpp"
+#include "src/header/ChessInfo.hpp"
 
-#include "Piece.hpp"
-#include "EmptyPiece.hpp"
-#include "King.hpp"
-#include "Queen.hpp"
-#include "Bishop.hpp"
-#include "Rook.hpp"
-#include "Knight.hpp"
-#include "Pawn.hpp"
+#include "src/header/Piece.hpp"
+#include "src/header/EmptyPiece.hpp"
+#include "src/header/King.hpp"
+#include "src/header/Queen.hpp"
+#include "src/header/Bishop.hpp"
+#include "src/header/Rook.hpp"
+#include "src/header/Knight.hpp"
+#include "src/header/Pawn.hpp"
 
 using namespace std;
 

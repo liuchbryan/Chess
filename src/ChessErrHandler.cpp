@@ -1,5 +1,5 @@
 
-#include "ChessErrHandler.hpp"
+#include "header/ChessErrHandler.hpp"
 
 ChessErrHandler::ChessErrHandler () {
 

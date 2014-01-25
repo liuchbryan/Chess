@@ -1,7 +1,7 @@
 // Bryan Liu (chl312), Dept. of Computing, Imperial College London
 // Bishop.cpp - implementation of Bishop extending Piece (info in Bishop.hpp)
 
-#include "Bishop.hpp"
+#include "header/Bishop.hpp"
 
 Bishop::Bishop (bool isWhitePlayer) : Piece (isWhitePlayer) {
 

@@ -1,7 +1,7 @@
 // Bryan Liu (chl312), Dept. of Computing, Imperial College London
 // Queen.cpp - implementation of Queen extending Piece (info in Queen.hpp)
 
-#include "Queen.hpp"
+#include "header/Queen.hpp"
 
 Queen::Queen (bool isWhitePlayer) : Piece (isWhitePlayer) {
 

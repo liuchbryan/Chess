@@ -10,7 +10,7 @@ int main () {
 
   cout << endl;
   cout << "===========================" << endl;
-  cout << " Fool's Mate" << endl;
+  cout << "Fool's Mate" << endl;
   cout << "===========================" << endl;
   cout << endl;
   
@@ -22,7 +22,7 @@ int main () {
 
   cout << endl;
   cout << "===========================" << endl;
-  cout << " Scholar's Mate" << endl;
+  cout << "Scholar's Mate" << endl;
   cout << "===========================" << endl;
   cout << endl;
 
@@ -37,7 +37,7 @@ int main () {
 
   cout << endl;
   cout << "===========================" << endl;
-  cout << " Hohmeister vs Frank (1993)" << endl;
+  cout << "Hohmeister vs Frank (1993)" << endl;
   cout << "===========================" << endl;
   cout << endl;
 

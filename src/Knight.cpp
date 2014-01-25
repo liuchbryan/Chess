@@ -1,7 +1,7 @@
 // Bryan Liu (chl312), Dept. of Computing, Imperial College London
 // Knight.cpp - implementation of Knight extending Piece (info in Knight.hpp)
 
-#include "Knight.hpp"
+#include "header/Knight.hpp"
 
 Knight::Knight (bool isWhitePlayer) : Piece (isWhitePlayer) {
 

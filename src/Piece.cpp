@@ -3,7 +3,7 @@
    (Constructor, Deconstructor and common methods for extending classes)
 */
 
-#include "Piece.hpp"
+#include "header/Piece.hpp"
 
 Piece::Piece (bool isWhitePlayer){
   _isWhitePlayer = isWhitePlayer;

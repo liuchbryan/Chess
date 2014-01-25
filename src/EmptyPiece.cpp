@@ -1,5 +1,5 @@
 
-#include "EmptyPiece.hpp"
+#include "header/EmptyPiece.hpp"
 
 EmptyPiece::EmptyPiece (bool isWhitePlayer) : Piece(isWhitePlayer) {
 
