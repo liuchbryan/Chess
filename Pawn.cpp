@@ -63,6 +63,7 @@ int Pawn::isValidMove
     try {
       /* If no exception is thrown, a piece is occupying the destination
          Which is undesirable regardless of its friendliness
+         The if clause is simply to check which error number to return
       */
       if (isFriendly (board -> at (destFileRank))) {
         return ChessErrHandler::FRIENDLY_AT_DEST;
@@ -86,7 +87,6 @@ int Pawn::isValidMove
       return ChessErrHandler::ILLEGAL_MOVE_PATTERN;
     }
   }
-
   return ChessErrHandler::NO_ERROR;
 }
 
@@ -106,8 +106,8 @@ string Pawn::toGraphics () {
 }
 
 /* Pawn.isAdjacentFile(): 
-   pre-cond: arg is a valid file & rank representation of a different square
-   post-cond: return true iff absolute file difference is 1
+   pre-cond: args are valid file & rank representations of a different square
+   post-cond: return true iff absolute file difference of args is 1
 */
 bool Pawn::isAdjacentFile (string sourceFileRank, string destFileRank) {
 

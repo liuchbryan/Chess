@@ -19,6 +19,6 @@ SampleGames.o: SampleGames.cpp
 	g++ $(CFLAGS) $(word 2,$^) -o $@
 
 clean:
-	rm -f *.o Chess Test SampleGames
+	rm -f *.o Chess SampleGames
 
 .PHONY: clean

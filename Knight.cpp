@@ -54,7 +54,7 @@ string Knight::toGraphics () {
 }
 
 /* Knight.movesInLShape()
-   pre-cond: arg is a valid file & rank representation of a different square
+   pre-cond: args are valid file & rank representations of a different square
    post-cond: return true iff abs file diff = 2(1) & abs rank diff = 1(2)
 */
 bool Knight::movesInLShape (string sourceFileRank, string destFileRank) {

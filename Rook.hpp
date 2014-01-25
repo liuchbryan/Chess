@@ -2,8 +2,8 @@
 // Rook.hpp - Rook extending Piece
 
 /* Represent Implementation of a Rook piece in chess
-   Including concrete implementation of isValidMove() and toString()
-     inherited from abstract superclass Piece
+   Including concrete implementation of clone(), isValidMove(), toString()
+     and toGraphics(), inherited from abstract superclass Piece
 */
 
 #ifndef ROOK_H

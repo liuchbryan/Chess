@@ -9,16 +9,21 @@ Piece::Piece (bool isWhitePlayer){
   _isWhitePlayer = isWhitePlayer;
 }
 
-
-void Piece::confirmMove (string destFileRank) {
+/* Piece.confirmMove():
+   set isFirstMove false when called as it has moved at least once
+*/   
+void Piece::confirmMove () {
   isFirstMove = false;
 }
 
-// Piece.isWhitePlayer() post-cond.: return if this piece belongs to White P.
+// Piece.isWhitePlayer() post-cond.: return if this piece belongs to White p.
 bool Piece::isWhitePlayer () {
   return (_isWhitePlayer);
 }
 
+/* Piece.isKing() post-cond.: return true iff the piece is a King
+     (represented by _isKing - only set to true by King constructor)
+*/
 bool Piece::isKing () {
   return _isKing;
 }
@@ -37,11 +42,10 @@ string Piece::playerToString () {
 }
 
 /* Piece::isSame_ ()
-   Pre-cond.: 
-   Post-cond.: 
-
+   Pre-cond.: sourceFileRank, destFileRank valid file & rank representation
+   Post-cond.: return true iff sourceFileRank and destFileRank is on the same
+               file/ rank/ diagonal respectively
 */ 
-
 bool Piece::isSameFile (string sourceFileRank, string destFileRank) {
   return sourceFileRank.at(ChessInfo::FILE_INDEX) ==
          destFileRank.at(ChessInfo::FILE_INDEX);
@@ -61,8 +65,10 @@ bool Piece::isSameDiagonal (string sourceFileRank, string destFileRank) {
 }
 
 /* Piece.noVerticalObstruction()
-   Pre-cond.: 
-   Post-cond.:
+   Pre-cond.: sourceFileRank, destFileRank valid file & rank representation
+              board a valid, existing reference to map rep. of the board
+   Post-cond.: return true iff there are no pieces on intermediate ranks
+               on the board
 */
 bool Piece::noVerticalObstruction 
   (string sourceFileRank, string destFileRank, map<string, Piece*>* board){
@@ -85,9 +91,11 @@ bool Piece::noVerticalObstruction
   return true;
 }
 
-/* Piece.noHorizontalObstruction()
-   Pre-cond.: 
-   Post-cond.: 
+/* Piece.noVerticalObstruction()
+   Pre-cond.: sourceFileRank, destFileRank valid file & rank representation
+              board a valid, existing reference to map rep. of the board
+   Post-cond.: return true iff there are no pieces on intermediate files
+               on the board
 */
 bool Piece::noHorizontalObstruction
   (string sourceFileRank, string destFileRank, map<string, Piece*>* board){
@@ -110,9 +118,11 @@ bool Piece::noHorizontalObstruction
   return true;
 }
 
-/* Piece.noDiagonalObstruction()
-   Pre-cond.: 
-   Post-cond.: 
+/* Piece.noVerticalObstruction()
+   Pre-cond.: sourceFileRank, destFileRank valid file & rank representation
+              board a valid, existing reference to map rep. of the board
+   Post-cond.: return true iff there are no pieces on intermediate files
+               and ranks, which is on the same diagonal, on the board
 */
 bool Piece::noDiagonalObstruction
   (string sourceFileRank, string destFileRank, map<string, Piece*>* board){

@@ -2,8 +2,8 @@
 // Queen.hpp - Queen extending Piece
 
 /* Represent Implementation of a Queen piece in chess
-   Including concrete implementation of isValidMove() and toString()
-     inherited from abstract superclass Piece
+   Including concrete implementation of clone(), isValidMove(), toString()
+     and toGraphics(), inherited from abstract superclass Piece
 */
 
 #ifndef QUEEN_H

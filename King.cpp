@@ -53,7 +53,7 @@ string King::toGraphics () {
 }
 
 /* King.isAdjacentSquare():
-   pre-cond: arg is valid file & rank representation of a different square
+   pre-cond: args are valid file & rank representations of a different square
    post-cond: return true iff the displacement of file and rank is at most 1
 */
 bool King::isAdjacentSquare (string sourceFileRank, string destFileRank) {

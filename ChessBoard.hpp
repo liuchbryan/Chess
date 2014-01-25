@@ -1,10 +1,6 @@
-// Skeleton header file, you will need to edit this for your submission.
-
-// Your final submission must expose the constructor, deconstructor, 
-// submitMove and resetBoard methods.
-// You may add any additonal files/methods as you see fit
-// (be sure to also include them in the makefile).
-
+// Bryan Liu (chl312), Dept. of Computing, Imperial College London
+// ChessBoard.hpp - ChessBoard 
+// (Representing implementation of a Chess game engine)
 
 #ifndef CHESSBOARD_H
 #define CHESSBOARD_H
@@ -28,10 +24,16 @@
 
 using namespace std;
 
+/* Improving clarity - the map of string (file & rank) to (ref. to) Piece would
+                       be simply known as Board (as it represents a board)
+*/
 typedef map<string, Piece*> Board;
 
 class ChessBoard {
 
+/* 
+
+*/
   private:
     Board* board;
     ChessErrHandler* errorHandler;
@@ -54,19 +56,20 @@ class ChessBoard {
     bool withinChessBoard (string fileRank);
     bool sourceIsNotEmpty (string sourceFileRank);
     bool isCurrentPlayerPiece (Piece* piece, string sourceFileRank);
-    bool pieceMoveIsValid (int returnCode, Piece* piece, 
+    bool pieceMoveIsValid (int returnCode, Piece* piece,
                            string sourceFileRank, string destFileRank);
-    void handleInvalidMove (int returnCode, Piece* piece, 
+    void handleInvalidMove (int returnCode, Piece* piece,
                             string sourceFileRank, string destFileRank);
 
-    bool kingIsSafeFromRivalry 
+    bool kingIsSafeFromRivalry
       (bool isWhiteTurn, map<string, Piece*>* board);
     bool playerHaveValidMove (bool isWhiteTurn, Board* board);
     string findPlayersKingFileRank (bool isWhiteTurn, Board* board);
 
-    Piece* tryMoveAndReturnCaptured (string sourceFileRank, 
+    Piece* tryMoveAndReturnCaptured (string sourceFileRank,
                                      string destFileRank, Board* board);
-    void confirmMove (string sourceFileRank, string destFileRank, Board* board);
+    void confirmMove
+      (string sourceFileRank, string destFileRank, Board* board);
 
     void switchPlayers ();
 

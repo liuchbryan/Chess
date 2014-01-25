@@ -2,8 +2,8 @@
 // Knight.hpp - Knight extending Piece
 
 /* Represent Implementation of a Knight piece in chess
-   Including concrete implementation of isValidMove() and toString()
-     inherited from abstract superclass Piece
+   Including concrete implementation of clone(), isValidMove(), toString()
+     and toGraphics(), inherited from abstract superclass Piece
    Private method movesInLShape() used in logic of validing move of a Knight
 */
 

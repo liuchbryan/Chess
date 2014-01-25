@@ -3,7 +3,7 @@
 
 /* Represent Implementation of a general piece in chess
    Including general, common methods a piece using to validate its own move
-    and hook methods isValidMove() and toString()   
+    and hook methods clone(), isValidMove(), toString() and toGraphics()  
 */
 
 #ifndef PIECES_H
@@ -27,14 +27,18 @@ class Piece {
 
   public:
     Piece (bool isWhitePlayer);
+
+    /* Piece.clone()
+       post-cond.: return a different object with same information of itself
+    */  
     virtual Piece* clone () = 0;
 
-    void confirmMove (string destFileRank);
+    void confirmMove ();
     bool isWhitePlayer ();
     bool isKing ();
 
     /* Piece.isValidMove()
-       Pre-cond.: destFileRank is a valid file & rank representation
+       Pre-cond.: sourceFileRank, destFileRank are valid file & rank rep.s
                   board is a reference to an existing map implementation of
                     current chess board situation
        Post-cond.: return 0 if the move is valid
@@ -45,8 +49,11 @@ class Piece {
       string destFileRank, map<string, Piece*>* board) = 0;
 
     string playerToString ();
+
     // Piece.toString() Post-cond.: return the string rep. of the piece
     virtual string toString () = 0;
+
+    // Piece.toGraphics() Post-cond: return graphical rep. of the piece
     virtual string toGraphics () = 0;
 
   protected:

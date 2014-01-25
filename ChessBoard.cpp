@@ -283,7 +283,7 @@ void ChessBoard::confirmMove
     board -> insert ({ destFileRank, movingPiece });
   }
 
-  movingPiece -> confirmMove (destFileRank);
+  movingPiece -> confirmMove ();
   board -> erase (sourceFileRank);
 }
 

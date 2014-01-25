@@ -2,8 +2,8 @@
 // Pawn.hpp - Pawn extending Piece
 
 /* Represent Implementation of a Pawn piece in chess
-   Including concrete implementation of isValidMove() and toString()
-     inherited from abstract superclass Piece
+   Including concrete implementation of clone(), isValidMove(), toString()
+     and toGraphics(), inherited from abstract superclass Piece
    Private method isAdjacentFile() used in logic of validing move of a Pawn
 */
 
