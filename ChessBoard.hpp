@@ -39,6 +39,7 @@ class ChessBoard {
   private:
     Board* board;
     ChessErrHandler* errorHandler;
+    Piece* piecePlaceholder;
 
     bool isWhiteTurn = true;
     bool isInCheck = false;
@@ -52,13 +53,20 @@ class ChessBoard {
     void submitMove(const char* fromSquare, const char* toSquare);
 
   private:
-// Pre-defined setter of the boolean flags, internal use only
+/* Pre-defined setter of the boolean flags, internal use only
+   (Hiding object fields from being changed by public methods directly)
+*/
+    void getANewBoard ();
     void makeGameInCheck ();
     void makeGameNotInCheck ();
     void beginAGame ();
     void endTheGame ();
     void makeWhiteGoesNext ();
 
+/* N.B.: To reduce cohesion between methods and the class, class field are
+         passed in as arguments of individual methods, aiming to allow methods
+         to function elsewhere when moved to other classes/ programs
+*/
 /* Pre-move checking methods:
    Multiple layers of check if input are valid move on board
 */
@@ -98,6 +106,7 @@ class ChessBoard {
     void switchPlayers ();
 
     Board* cloneBoard (Board* board);
+    void deepCleanBoard (Board* board);
 
 // Printing methods, in both text and graphics, on stdout
     bool showMoveAndCheckIfGameCanContinue
@@ -114,9 +123,3 @@ class ChessBoard {
 };
 
 #endif
-
-/* Discussion: To reduce cohesion between methods and the class, class field
-               are passed in as arguments of individual methods, aiming to
-               allow methods to function elsewhere when moved to other
-               classes/ programs
-*/

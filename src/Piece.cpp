@@ -5,8 +5,12 @@
 
 #include "header/Piece.hpp"
 
-Piece::Piece (bool isWhitePlayer){
+Piece::Piece (bool isWhitePlayer) {
   _isWhitePlayer = isWhitePlayer;
+}
+
+Piece::~Piece () {
+
 }
 
 /* Piece.confirmMove():

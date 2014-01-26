@@ -19,6 +19,7 @@ class Pawn : public Piece {
 
   public:
     Pawn (bool isWhitePlayer);
+    ~Pawn ();
     Pawn* clone ();
 
     int isValidMove 

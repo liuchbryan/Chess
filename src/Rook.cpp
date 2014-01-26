@@ -7,6 +7,10 @@ Rook::Rook (bool isWhitePlayer) : Piece (isWhitePlayer) {
 
 }
 
+Rook::~Rook () {
+
+}
+
 Rook* Rook::clone () {
   return new Rook (this -> isWhitePlayer());
 }

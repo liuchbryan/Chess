@@ -5,6 +5,10 @@ EmptyPiece::EmptyPiece (bool isWhitePlayer) : Piece(isWhitePlayer) {
 
 }
 
+EmptyPiece::~EmptyPiece () {
+
+}
+
 EmptyPiece* EmptyPiece::clone () {
   return new EmptyPiece (this -> isWhitePlayer ());
 }

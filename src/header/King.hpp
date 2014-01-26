@@ -19,6 +19,7 @@ class King : public Piece {
 
   public:
     King (bool isWhitePlayer);
+    ~King ();
     King* clone ();
  
     int isValidMove 

@@ -7,6 +7,10 @@ Queen::Queen (bool isWhitePlayer) : Piece (isWhitePlayer) {
 
 }
 
+Queen::~Queen () {
+
+}
+
 Queen* Queen::clone () {
   return new Queen (this -> isWhitePlayer());
 }

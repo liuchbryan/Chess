@@ -20,6 +20,7 @@ class EmptyPiece : public Piece {
 
   public:
     EmptyPiece (bool isWhitePlayer);
+    ~EmptyPiece ();
     EmptyPiece* clone ();
 
     int isValidMove 

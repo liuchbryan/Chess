@@ -18,6 +18,7 @@ class Queen : public Piece {
 
   public:
     Queen (bool isWhitePlayer);
+    ~Queen ();
     Queen* clone ();
 
     int isValidMove 

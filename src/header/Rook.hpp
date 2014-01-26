@@ -18,6 +18,7 @@ class Rook : public Piece {
 
   public:
     Rook (bool isWhitePlayer);
+    ~Rook ();
     Rook* clone ();
 
     int isValidMove 

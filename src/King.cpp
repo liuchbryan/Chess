@@ -7,6 +7,10 @@ King::King (bool isWhitePlayer) : Piece (isWhitePlayer) {
   _isKing = true;
 }
 
+King::~King () {
+
+}
+
 King* King::clone () {
   return new King (this -> isWhitePlayer ());
 }

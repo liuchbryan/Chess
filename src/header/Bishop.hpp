@@ -18,6 +18,7 @@ class Bishop : public Piece {
 
   public:
     Bishop (bool isWhitePlayer);
+    ~Bishop ();
     Bishop* clone ();
 
     int isValidMove 

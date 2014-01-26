@@ -1,10 +1,5 @@
 // Bryan Liu (chl312), Dept. of Computing, Imperial College London
-// Skeleton C++ file, you will need to edit this for your submission.
-
-// Your final submission must expose the constructor, deconstructor, 
-// submitMove and resetBoard methods.
-// You may add any additonal files/methods as you see fit
-// (be sure to also include them in the makefile).
+// ChessBoard.cpp - Implementation of ChessBoard (Info in ChessBoard.hpp)
 
 #include "ChessBoard.hpp"
 
@@ -13,12 +8,14 @@ using namespace std;
 ChessBoard::ChessBoard() {
   board = new Board ();
   errorHandler = new ChessErrHandler ();
+  piecePlaceholder = new EmptyPiece (true);
   resetBoard();
 }
 
 ChessBoard::~ChessBoard() {
-  delete board;
+  deepCleanBoard(board);
   delete errorHandler;
+  delete piecePlaceholder;
 }
 
 void ChessBoard::submitMove(const char* fromSquare, const char* toSquare){
@@ -48,14 +45,16 @@ void ChessBoard::submitMove(const char* fromSquare, const char* toSquare){
         capturedPiece, destFileRank, isWhiteTurn, board)) {
     endTheGame ();
   }
-  
+
   switchPlayers();
+  
+  delete capturedPiece;
+  deepCleanBoard (sandboxBoard);
 }    
 
 void ChessBoard::resetBoard(){
-  delete board;
-  board = new Board;
 
+  getANewBoard();
   beginAGame();
   makeWhiteGoesNext ();
   makeGameNotInCheck ();
@@ -92,6 +91,13 @@ void ChessBoard::resetBoard(){
   cout << "Let the game begin..." << endl;
 }
 
+// The pre-defined setters
+void ChessBoard::getANewBoard () {
+// Assumption: board contains non-null pointer to a Board, thus can be deleted
+  deepCleanBoard (this -> board);
+  board = new Board;
+}
+
 void ChessBoard::makeGameInCheck () {
   isInCheck = true;
 }
@@ -117,31 +123,32 @@ void ChessBoard::makeWhiteGoesNext () {
    N.B: A kind request not to judge on "if condition then false else true"
         It is, at the end, an over-literal program illustration
 */
+
 // gameCanContine (): check if the game is not ended
 bool ChessBoard::gameCanContinue (string sourceFileRank, string destFileRank) {
   if (hasEnded) {
     handleInvalidMove (ChessErrHandler::GAME_HAS_ENDED,
-                       new EmptyPiece(true), sourceFileRank, destFileRank);
+                       piecePlaceholder, sourceFileRank, destFileRank);
     return false;
   }
   return true;
 }
 
 /* sourceAndDestIsValid (): check if given source and dest's file and rank
-   represenation are within chess board
+                            represenation are within chess board
 */
 bool ChessBoard::sourceAndDestIsValid 
   (string sourceFileRank, string destFileRank) {
 
   if (!withinChessBoard(sourceFileRank)) {
     handleInvalidMove (ChessErrHandler::SOURCE_OUTOF_BOUND,
-                       new EmptyPiece(true), sourceFileRank, destFileRank);
+                       piecePlaceholder, sourceFileRank, destFileRank);
     return false;
   }
 
   if (!withinChessBoard(destFileRank)) {
     handleInvalidMove (ChessErrHandler::DEST_OUTOF_BOUND,
-                       new EmptyPiece(true), sourceFileRank, destFileRank);
+                       piecePlaceholder, sourceFileRank, destFileRank);
     return false;
   }
   return true;
@@ -167,7 +174,7 @@ bool ChessBoard::sourceIsNotEmpty (string sourceFileRank, Board* board) {
     board -> at (sourceFileRank);
   } catch (const std::out_of_range &err) {
     handleInvalidMove (ChessErrHandler::MOVED_EMPTY_PIECE,
-                       new EmptyPiece(true), sourceFileRank, sourceFileRank); 
+                       piecePlaceholder, sourceFileRank, sourceFileRank); 
     return false;
   }
   return true;
@@ -278,12 +285,15 @@ bool ChessBoard::playerHaveValidMove
                 possibleDest, board) == ChessErrHandler::NO_ERROR) {
 
             Board* sandboxBoard = cloneBoard (board);
-            tryMoveAndReturnCaptured 
+            Piece* captured = tryMoveAndReturnCaptured 
               (possibleSource, possibleDest, sandboxBoard);
+            bool haveValidMove 
+              = kingIsSafeFromRivalry (isWhiteTurn, sandboxBoard);
 
-            if (kingIsSafeFromRivalry (isWhiteTurn, sandboxBoard)) {
-              return true;
-            }
+            delete captured;
+            deepCleanBoard (sandboxBoard);
+            
+            if (haveValidMove) return true;
           }
         }
       }
@@ -347,6 +357,8 @@ void ChessBoard::confirmMoveOnBoard
 
   Piece* movingPiece = board -> at (sourceFileRank);
   try {
+    Piece* destPiece = board -> at (destFileRank);
+    delete destPiece;
     board -> at (destFileRank) = movingPiece;
   } catch (const std::out_of_range &err) {
     board -> insert ({ destFileRank, movingPiece });
@@ -410,6 +422,17 @@ Board* ChessBoard::cloneBoard (Board* board) {
     clone -> insert ({ it -> first, it -> second -> clone ()});
   }
   return clone;
+}
+
+/* deepCleanBoard ():
+   deep clean the given board, free all containing Piece's memory and itself 
+*/ 
+void ChessBoard::deepCleanBoard (Board* board) {
+  
+  for (Board::iterator it = board -> begin () ; it != board -> end (); it++) {
+    delete it -> second;
+  }
+  delete board;
 }
 
 /* print(Move|Capture|Check|Checkmate|Stalemate) ():

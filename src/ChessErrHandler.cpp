@@ -73,5 +73,4 @@ void ChessErrHandler::printErr
       cout << "An unexpected error has occured. Please try again." << endl;
     }
   }
-
 }

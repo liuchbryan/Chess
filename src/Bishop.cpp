@@ -7,6 +7,10 @@ Bishop::Bishop (bool isWhitePlayer) : Piece (isWhitePlayer) {
 
 }
 
+Bishop::~Bishop () {
+
+}
+
 Bishop* Bishop::clone () {
   return new Bishop (this -> isWhitePlayer());
 }

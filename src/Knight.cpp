@@ -7,6 +7,10 @@ Knight::Knight (bool isWhitePlayer) : Piece (isWhitePlayer) {
 
 }
 
+Knight::~Knight () {
+
+}
+
 Knight* Knight::clone () {
   return new Knight (this -> isWhitePlayer ());
 }

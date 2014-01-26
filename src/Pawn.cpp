@@ -8,6 +8,10 @@ Pawn::Pawn (bool isWhitePlayer)
 
 }
 
+Pawn::~Pawn () {
+
+}
+
 Pawn* Pawn::clone () {
   return new Pawn (this -> isWhitePlayer());
 }
