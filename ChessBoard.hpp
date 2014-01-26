@@ -34,6 +34,7 @@ class ChessBoard {
 /* Contains knowledge of:
    board - situation of chess board at that instant
    errorHander - an error handler to handle invalid submitted moves
+   piecePlaceholder - a Null Piece (EmptyPiece) for those who might need it
    boolean flags - obvious in function by their names, right?
 */
   private:
@@ -102,7 +103,7 @@ class ChessBoard {
     void confirmMoveOnBoard
       (string sourceFileRank, string destFileRank, Board* board);
 
-// Doesn't require explanation for the following two methods right?
+// Doesn't require much explanation for the following three methods right?
     void switchPlayers ();
 
     Board* cloneBoard (Board* board);

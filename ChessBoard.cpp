@@ -18,6 +18,24 @@ ChessBoard::~ChessBoard() {
   delete piecePlaceholder;
 }
 
+/* ChessBoard.submitMove():
+   Verifies the move is valid, conduct the move and print on screen (stdout)
+   Before any constructive checking:
+     - Is the game ended? (No point to continue if it is ended)
+   Pre-move check:
+     - Is the given source and destination valid file and rank representations?
+     - Is the source an non-empty square?
+     - Is the piece on source square belongs to the player making the move?
+     - Is the piece's move on the current board valid based on its type?
+   Try move: - In a sandbox to prevent messing up the original board
+             - Check: Does the move keeps current player's King in a safe
+                      position (i.e. NOT in check)?
+   Confirm the move on both the board and the piece
+   Print the move on screen, and check if the game can continue
+     If yes, switch player and "wait" for next submitMove
+     If no, print statement and final represenation of board
+   Finally do some nice memory management to prevent memory leakage
+*/
 void ChessBoard::submitMove(const char* fromSquare, const char* toSquare){
   string sourceFileRank (fromSquare);
   string destFileRank (toSquare);
@@ -52,6 +70,9 @@ void ChessBoard::submitMove(const char* fromSquare, const char* toSquare){
   deepCleanBoard (sandboxBoard);
 }    
 
+/* ChessBoard.resetBoard (): i.e. make a new game
+   Rest the fields of the engine and insert appropriate pieces onto the board
+*/
 void ChessBoard::resetBoard(){
 
   getANewBoard();
@@ -91,9 +112,11 @@ void ChessBoard::resetBoard(){
   cout << "Let the game begin..." << endl;
 }
 
-// The pre-defined setters
+// The pre-defined setters (6 methods)
+/* getANewBoard () assumption:
+   board contains non-null pointer to a Board, thus can be deep cleaned
+*/
 void ChessBoard::getANewBoard () {
-// Assumption: board contains non-null pointer to a Board, thus can be deleted
   deepCleanBoard (this -> board);
   board = new Board;
 }
@@ -381,7 +404,7 @@ void ChessBoard::confirmMoveOnBoard
    E - "Checkmate! (loser side) loses." (ditto, but while in check)
    F - "(unicode visualisation of chess board)"
 
-   Also return if the game can continue or not
+   Also return if the game can continue or not (i.e. no checkmate/stalemate)
 */
 bool ChessBoard::showMoveAndCheckIfGameCanContinue (Piece* piece, 
   string sourceFileRank, Piece* capturedPiece, string destFileRank, 
@@ -393,7 +416,7 @@ bool ChessBoard::showMoveAndCheckIfGameCanContinue (Piece* piece,
   }
   if (!kingIsSafeFromRivalry (!isWhiteTurn, board)) {
     printCheck ();
-    isInCheck = true;
+    makeGameInCheck ();
   }
   cout << endl;
 
@@ -409,7 +432,7 @@ bool ChessBoard::showMoveAndCheckIfGameCanContinue (Piece* piece,
   return true;
 }
 
-// Obvious.
+// Have a guess what it does :)
 void ChessBoard::switchPlayers() {
   isWhiteTurn = !(isWhiteTurn);
 }

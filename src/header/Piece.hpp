@@ -43,12 +43,12 @@ class Piece {
        Post-cond.: return 0 if the move is valid
                    respective error code (defined in ChessErrHandler class)
                      for error reporting otherwise
-       Notes: It is decided to include check for source = dest in each
-                concrete implementation of Piece since there is subtlety in
-                method call structure after so-called refactoring and for some
-                piece it might be "valid" for source = dest (say EmptyPiece)
-              Similar for checking friendlies in destination (Pawn has
-                different check and error reporting logic)
+       N.B.: It is decided to include check for source = dest in each
+               concrete implementation of Piece since there is subtlety in
+               method call structure after so-called refactoring and for some
+               piece it might be "valid" for source = dest (say EmptyPiece)
+             Similar for checking friendlies in destination (Pawn has
+               different check and error reporting logic)
     */
     virtual int isValidMove (string sourceFileRank, 
       string destFileRank, map<string, Piece*>* board) = 0;

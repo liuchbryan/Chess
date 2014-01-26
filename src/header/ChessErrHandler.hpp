@@ -1,3 +1,9 @@
+// Bryan Liu (chl312), Dept. of Computing, Imperial College London
+// ChessErrHandler.hpp - ChessErrHandler
+/* An Error Handler which would print *helpful* error messages when required
+   by Chess game engine (ChessBoard)
+*/
+
 #ifndef CHESSERRHANDLER_H
 #define CHESSERRHANDLER_H
 
@@ -8,7 +14,8 @@
 
 class ChessErrHandler {
 
-  public:   
+  public:
+    // The list of error codes for error hander to understand the problem
     static const int NO_ERROR = 0;
     static const int DEST_EQ_SOURCE = 10;
     static const int SOURCE_OUTOF_BOUND = 11;
@@ -24,9 +31,10 @@ class ChessErrHandler {
 
   public:
     ChessErrHandler ();
-    void printErr 
-      (int errNo, Piece* piece, string sourceFileRank, string destFileRank); 
 
+    // print the error with one or more given information
+    void printErr (int errNo, Piece* piece, 
+      string sourceFileRank, string destFileRank); 
 };
 
 #endif

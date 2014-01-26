@@ -1,3 +1,6 @@
+// Bryan Liu (chl312), Dept. of Computing, Imperial College London
+// ChessInfo.hpp - ChessInfo
+// Provide general information for use across different Chess classes
 
 #ifndef CHESSINFO_H
 #define CHESSINFO_H

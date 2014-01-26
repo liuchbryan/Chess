@@ -1,3 +1,5 @@
+// Bryan Liu (chl312), Dept. of Computing, Imperial College London
+// ChessErrHandler.cpp - Implementation of ChessErrHandler
 
 #include "header/ChessErrHandler.hpp"
 
@@ -5,6 +7,9 @@ ChessErrHandler::ChessErrHandler () {
 
 }
 
+/* ChessErrHandler.printErr():
+   Print the error message w.r.t. given error number
+*/
 void ChessErrHandler::printErr
   (int errNo, Piece* piece, string sourceFileRank, string destFileRank) {
 
@@ -32,6 +37,9 @@ void ChessErrHandler::printErr
            << " turn to move! Be patient!" << endl;
       break;
     }
+    /* The following five cases have common heading, thus the implementation
+         of nested case statement to prevent duplicate code
+     */
     case ChessErrHandler::ILLEGAL_MOVE_PATTERN :
     case ChessErrHandler::OBSTRUCTION_EN_ROUTE :
     case ChessErrHandler::FRIENDLY_AT_DEST :
@@ -68,7 +76,6 @@ void ChessErrHandler::printErr
       cout << "The game has ended! What are you still doing here?" << endl;
       break;
     }
-    
     default : {
       cout << "An unexpected error has occured. Please try again." << endl;
     }
