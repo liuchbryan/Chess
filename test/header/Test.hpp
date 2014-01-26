@@ -6,8 +6,13 @@
 
 #include <cassert>
 #include <string>
+#include <map>
 
-#include "../src/header/ChessInfo.hpp"
+#include "../../src/header/ChessInfo.hpp"
+#include "../../src/header/ChessErrHandler.hpp"
+#include "../../src/header/Piece.hpp"
+
+typedef map<string, Piece*> Board;
 
 class Test {
 
