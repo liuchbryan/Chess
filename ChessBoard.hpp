@@ -31,8 +31,10 @@ typedef map<string, Piece*> Board;
 
 class ChessBoard {
 
-/* 
-
+/* Contains knowledge of:
+   board - situation of chess board at that instant
+   errorHander - an error handler to handle invalid submitted moves
+   boolean flags - obvious in function by their names, right?
 */
   private:
     Board* board;
@@ -50,30 +52,57 @@ class ChessBoard {
     void submitMove(const char* fromSquare, const char* toSquare);
 
   private:
-    bool gameCanContinue (string sourceFileRank, string destFileRank);
+// Pre-defined setter of the boolean flags, internal use only
+    void makeGameInCheck ();
+    void makeGameNotInCheck ();
+    void beginAGame ();
+    void endTheGame ();
+    void makeWhiteGoesNext ();
 
+/* Pre-move checking methods:
+   Multiple layers of check if input are valid move on board
+*/
+    bool gameCanContinue (string sourceFileRank, string destFileRank);
     bool sourceAndDestIsValid (string sourceFileRank, string destFileRank);
     bool withinChessBoard (string fileRank);
-    bool sourceIsNotEmpty (string sourceFileRank);
-    bool isCurrentPlayerPiece (Piece* piece, string sourceFileRank);
+    bool sourceIsNotEmpty (string sourceFileRank, Board* board);
+    bool isCurrentPlayerPiece (bool isWhiteTurn, Piece* piece, 
+                               string sourceFileRank);
     bool pieceMoveIsValid (int returnCode, Piece* piece,
                            string sourceFileRank, string destFileRank);
+    bool pieceMoveKeepsKingSafe (bool isWhiteTurn, Piece* piece,
+      string sourceFileRank, string destFileRank, Board* sandboxBoard);
+
+// Responsible in calling the handler to print out *helpful* error messages
     void handleInvalidMove (int returnCode, Piece* piece,
                             string sourceFileRank, string destFileRank);
 
-    bool kingIsSafeFromRivalry
-      (bool isWhiteTurn, map<string, Piece*>* board);
+/* Pre-move/ post-move (pure) checking methods:
+   Checks if the given side's king is safe from rivalry on given board, 
+     and if the given side have valid move based on given board
+*/
+    bool kingIsSafeFromRivalry (bool isWhiteTurn, Board* board);
     bool playerHaveValidMove (bool isWhiteTurn, Board* board);
     string findPlayersKingFileRank (bool isWhiteTurn, Board* board);
 
-    Piece* tryMoveAndReturnCaptured (string sourceFileRank,
-                                     string destFileRank, Board* board);
-    void confirmMove
+/* In-move methods that make side-effect on chess board:
+   Move the piece on source file and rank on a given board as in how one does
+     in real life (Method differs in if it returns the captured piece or not)
+*/
+    Piece* tryMoveAndReturnCaptured 
+      (string sourceFileRank, string destFileRank, Board* board);
+    void confirmMoveOnBoard
       (string sourceFileRank, string destFileRank, Board* board);
 
+// Doesn't require explanation for the following two methods right?
     void switchPlayers ();
 
     Board* cloneBoard (Board* board);
+
+// Printing methods, in both text and graphics, on stdout
+    bool showMoveAndCheckIfGameCanContinue
+      (Piece* piece, string sourceFileRank, Piece* capturedPiece, 
+       string destFileRank, bool isWhiteTurn, Board* board);
 
     void printMove (Piece* piece, string sourceFileRank, string destFileRank);
     void printCapture (Piece* capturedPiece);
@@ -85,3 +114,9 @@ class ChessBoard {
 };
 
 #endif
+
+/* Discussion: To reduce cohesion between methods and the class, class field
+               are passed in as arguments of individual methods, aiming to
+               allow methods to function elsewhere when moved to other
+               classes/ programs
+*/

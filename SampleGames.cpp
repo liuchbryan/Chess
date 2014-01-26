@@ -1,3 +1,15 @@
+// Bryan Liu (chl312), Dept. of Computing, Imperial College London
+/* SampleGames.cpp - Representation of some extra valid games, utilising
+     game engine class ChessBoard
+   Sample games include:
+   - Fool's Mate - quickest possible checkmate in chess
+     (http://en.wikipedia.org/wiki/Fool's_mate)
+   - Scholar's Mate - short game with simple mating attack by queen and bishop
+     (http://en.wikipedia.org/wiki/Scholar's_mate)
+   - Hohmeister vs Frank (1993) - short game on tournaments ending in stalemate
+     (http://www.chessgames.com/perl/chessgame?gid=1281617)
+*/
+
 #include <iostream>
 
 using namespace std;

@@ -27,59 +27,38 @@ void ChessBoard::submitMove(const char* fromSquare, const char* toSquare){
 
   if (!gameCanContinue (sourceFileRank, destFileRank)) return;
   if (!sourceAndDestIsValid (sourceFileRank, destFileRank)) return;
-  if (!sourceIsNotEmpty (sourceFileRank)) return;
+  if (!sourceIsNotEmpty (sourceFileRank, board)) return;
 
   Piece* piece = board->at(sourceFileRank);
-  if (!isCurrentPlayerPiece (piece, sourceFileRank)) return;
+  if (!isCurrentPlayerPiece (isWhiteTurn, piece, sourceFileRank)) return;
 
   int returnCode = piece -> isValidMove (sourceFileRank, destFileRank, board);
-  if (!pieceMoveIsValid (returnCode, piece, sourceFileRank, destFileRank)) 
-    return;
+  if (!pieceMoveIsValid (returnCode, piece, 
+       sourceFileRank, destFileRank)) return;
   
   Board* sandboxBoard = cloneBoard (board);
   Piece* capturedPiece 
     = tryMoveAndReturnCaptured (sourceFileRank, destFileRank, sandboxBoard);
-  if (!kingIsSafeFromRivalry (isWhiteTurn, sandboxBoard)) {
-    handleInvalidMove (ChessErrHandler::ALLOW_KING_IN_CHECK, piece, 
-                       sourceFileRank, destFileRank);
-    return;
-  }
-
-  confirmMove (sourceFileRank, destFileRank, board);
-  isInCheck = false;
-
-  printMove (piece, sourceFileRank, destFileRank);
-  if (capturedPiece != NULL) {
-    printCapture (capturedPiece);
-  }
-  if (!kingIsSafeFromRivalry (!isWhiteTurn, board)) {
-    printCheck ();
-    isInCheck = true;
-  }
-
-  cout << endl;
-  if (!playerHaveValidMove (!isWhiteTurn, board)) {
-    if (isInCheck) {
-      printCheckmate (!isWhiteTurn);
-    } else {
-      printStalemate () ;
-    }
-    hasEnded = true;
-    printBoard (board);
+  if (!pieceMoveKeepsKingSafe (isWhiteTurn, piece, 
+       sourceFileRank, destFileRank, sandboxBoard)) return;
+  
+  confirmMoveOnBoard (sourceFileRank, destFileRank, board);
+  
+  if (!showMoveAndCheckIfGameCanContinue (piece, sourceFileRank, 
+        capturedPiece, destFileRank, isWhiteTurn, board)) {
+    endTheGame ();
   }
   
   switchPlayers();
 }    
 
 void ChessBoard::resetBoard(){
-  // apprently we need to delete recursively all the pieces within the map
-  // leave it to later stage then
   delete board;
   board = new Board;
 
-  isWhiteTurn = true;
-  isInCheck = false;
-  hasEnded = false;
+  beginAGame();
+  makeWhiteGoesNext ();
+  makeGameNotInCheck ();
   
   string fileRank ("A1");
   for (char i = ChessInfo::MIN_FILE; i <= ChessInfo::MAX_FILE; i++) {
@@ -113,37 +92,64 @@ void ChessBoard::resetBoard(){
   cout << "Let the game begin..." << endl;
 }
 
-// Please do not judge me on if condition then false else true,
-// This is just an over-literal program illustration :D
+void ChessBoard::makeGameInCheck () {
+  isInCheck = true;
+}
+
+void ChessBoard::makeGameNotInCheck () {
+  isInCheck = false;
+}
+
+void ChessBoard::beginAGame () {
+  hasEnded = false;
+}
+
+void ChessBoard::endTheGame () {
+  hasEnded = true;
+}
+
+void ChessBoard::makeWhiteGoesNext () {
+  isWhiteTurn = true;
+}
+
+/* The following methods check certain conditions required for a valid chess
+     move and gives out an error to user (and return false) if it is not met
+   N.B: A kind request not to judge on "if condition then false else true"
+        It is, at the end, an over-literal program illustration
+*/
+// gameCanContine (): check if the game is not ended
 bool ChessBoard::gameCanContinue (string sourceFileRank, string destFileRank) {
   if (hasEnded) {
-    errorHandler -> printErr (ChessErrHandler::GAME_HAS_ENDED,
-                              new EmptyPiece(true),
-                              sourceFileRank, destFileRank);
+    handleInvalidMove (ChessErrHandler::GAME_HAS_ENDED,
+                       new EmptyPiece(true), sourceFileRank, destFileRank);
     return false;
   }
   return true;
 }
 
+/* sourceAndDestIsValid (): check if given source and dest's file and rank
+   represenation are within chess board
+*/
 bool ChessBoard::sourceAndDestIsValid 
   (string sourceFileRank, string destFileRank) {
 
   if (!withinChessBoard(sourceFileRank)) {
-    errorHandler->printErr(ChessErrHandler::SOURCE_OUTOF_BOUND,
-                           new EmptyPiece(true),
-                           sourceFileRank, destFileRank);
+    handleInvalidMove (ChessErrHandler::SOURCE_OUTOF_BOUND,
+                       new EmptyPiece(true), sourceFileRank, destFileRank);
     return false;
   }
 
   if (!withinChessBoard(destFileRank)) {
-    errorHandler->printErr(ChessErrHandler::DEST_OUTOF_BOUND,
-                           new EmptyPiece(true),
-                           sourceFileRank, destFileRank);
+    handleInvalidMove (ChessErrHandler::DEST_OUTOF_BOUND,
+                       new EmptyPiece(true), sourceFileRank, destFileRank);
     return false;
   }
   return true;
 }
 
+/* withinChesBoard (): helper method
+   check if file is in range 'A'-'H', rank is in range '1'-'8'
+*/
 bool ChessBoard::withinChessBoard (string fileRank) {
   
   char file = fileRank.at(ChessInfo::FILE_INDEX);
@@ -152,29 +158,38 @@ bool ChessBoard::withinChessBoard (string fileRank) {
          ChessInfo::MIN_RANK <= rank && rank <= ChessInfo::MAX_RANK;
 }
 
-bool ChessBoard::sourceIsNotEmpty (string sourceFileRank) {
+/* sourceIsNotEmpty ():
+   check if source is not an empty square (i.e. there is a piece to move)
+*/
+bool ChessBoard::sourceIsNotEmpty (string sourceFileRank, Board* board) {
 
   try {
-    board->at (sourceFileRank);
+    board -> at (sourceFileRank);
   } catch (const std::out_of_range &err) {
-    errorHandler->printErr(ChessErrHandler::MOVED_EMPTY_PIECE,
-                           new EmptyPiece(true), 
-                           sourceFileRank, sourceFileRank); 
+    handleInvalidMove (ChessErrHandler::MOVED_EMPTY_PIECE,
+                       new EmptyPiece(true), sourceFileRank, sourceFileRank); 
     return false;
   }
   return true;
 }
 
-bool ChessBoard::isCurrentPlayerPiece (Piece* piece, string sourceFileRank) {
+/* isCurrentPlayerPiece ():
+   check if the piece at source belongs to the player in turn
+*/
+bool ChessBoard::isCurrentPlayerPiece 
+  (bool isWhiteTurn, Piece* piece, string sourceFileRank) {
 
   bool isCurrentPlayerPiece = isWhiteTurn == piece -> isWhitePlayer ();
   if (!isCurrentPlayerPiece) {
-    errorHandler->printErr(ChessErrHandler::NOT_OWNER_TURN, piece, 
-                           sourceFileRank, sourceFileRank); 
+    handleInvalidMove (ChessErrHandler::NOT_OWNER_TURN, piece, 
+                       sourceFileRank, sourceFileRank);
   }
   return isCurrentPlayerPiece;
 }
 
+/* pieceMoveIsValid (): 
+   check if the return code for validating piece move is zero
+*/
 bool ChessBoard::pieceMoveIsValid
   (int returnCode, Piece* piece, string sourceFileRank, string destFileRank) {
 
@@ -185,12 +200,39 @@ bool ChessBoard::pieceMoveIsValid
   return true;
 }
 
-void ChessBoard::handleInvalidMove
-  (int returnCode, Piece* piece, string sourceFileRank, string destFileRank) {
+/* pieceMoveKeepsKingSafe ():
+   check if given side's King is safe under the given board
+   (in ChessBoard it would be a sandbox), 
+   if not give out an error to user and return false
+*/
+bool ChessBoard::pieceMoveKeepsKingSafe (bool isWhiteTurn, Piece* piece,
+  string sourceFileRank, string destFileRank, Board* board) {
 
-  errorHandler->printErr(returnCode, piece, sourceFileRank, destFileRank);
+  if (!kingIsSafeFromRivalry (isWhiteTurn, board)) {
+    handleInvalidMove (ChessErrHandler::ALLOW_KING_IN_CHECK, piece, 
+                       sourceFileRank, destFileRank);
+    return false;
+  }
+  return true;
 }
 
+/* handleInvalidMove ():
+   Calls the error handler to print the error, 
+   passing the information given by the calling functions
+*/
+void ChessBoard::handleInvalidMove
+  (int errorCode, Piece* piece, string sourceFileRank, string destFileRank) {
+  errorHandler -> printErr (errorCode, piece, sourceFileRank, destFileRank);
+}
+
+/* kingIsSafeFromRivalry ():
+   pre-cond.: board valid, existing representation of a Board
+   Return true iff none of the Pieces of the other side can capture the given
+     side's King (i.e. has a valid move to the King's file and rank)
+   Method: Check all pieces of the other side
+           For each piece check if its move to the given side's King is valid
+           (if true, the given side's King is not safe)
+*/
 bool ChessBoard::kingIsSafeFromRivalry 
   (bool isWhiteTurn, Board* board) {
 
@@ -209,6 +251,14 @@ bool ChessBoard::kingIsSafeFromRivalry
   return true;
 }
 
+/* playerHaveValidMove ():
+   pre-cond.: board valid, existing representation of a Board
+   Return true iff the given side have a valid move on the given board
+   Method: Check all pieces of the given side
+           For each piece check all its valid move
+           For each valid move check if given side's King is safe from attack
+           (if true, there is at least one valid move for the given side)
+*/
 bool ChessBoard::playerHaveValidMove
   (bool isWhiteTurn, Board* board) {
 
@@ -242,6 +292,10 @@ bool ChessBoard::playerHaveValidMove
   return false;
 }
 
+/* findPlayersKingFileRank ()
+   pre-cond.: board valid, existing representation of a Board
+   Iterate and return the location (file & rank) of the given side's King
+*/
 string ChessBoard::findPlayersKingFileRank (bool isWhiteTurn, Board* board) {
   for (Board::const_iterator it = board -> cbegin ();
        it != board -> cend (); it++) {
@@ -255,11 +309,20 @@ string ChessBoard::findPlayersKingFileRank (bool isWhiteTurn, Board* board) {
   return NULL;
 }
 
+/* tryMoveAndReturnCaptured ():
+   pre-cond.: sourceFileRank, destFileRank valid file & rank represenation
+              board valid, existing rep. of a Board (expt. to be a sandbox)
+   Given a board, conduct move from source to destination & get the captured
+   Case 1 (try block) - Another piece in destination (conduct capture)
+   Case 2 (catch block) - No piece exists in destination (conduct move)
+   Return the piece if in case 1, NULL otherwise
+*/
 Piece* ChessBoard::tryMoveAndReturnCaptured
   (string sourceFileRank, string destFileRank, Board* board) {
   
   Piece* sourcePiece = board -> at (sourceFileRank);
   Piece* destPiece;
+
   try {
     destPiece = board -> at (destFileRank);
     board -> at (destFileRank) = sourcePiece;
@@ -267,13 +330,19 @@ Piece* ChessBoard::tryMoveAndReturnCaptured
     destPiece = NULL;
     board -> insert ({ destFileRank, sourcePiece });
   }
-  
   board -> erase (sourceFileRank);
 
   return destPiece;
 }
 
-void ChessBoard::confirmMove 
+/* confirmMoveOnBoard ():
+   pre-cond.: sourceFileRank, destFileRank valid file & rank represenation
+              board valid, existing rep. of a Board (expected to be a real one)
+   Given a board, conduct the move from source to destination
+   Case 1 (try block) - Another piece in destination (conduct capture)
+   Case 2 (catch block) - No piece exists in destination (conduct move)
+*/
+void ChessBoard::confirmMoveOnBoard
   (string sourceFileRank, string destFileRank, Board* board) {
 
   Piece* movingPiece = board -> at (sourceFileRank);
@@ -285,13 +354,55 @@ void ChessBoard::confirmMove
 
   movingPiece -> confirmMove ();
   board -> erase (sourceFileRank);
+  makeGameNotInCheck();
 }
 
+/* Valid move report statement structure:
+   A B? C?
+   ((D|E)
+   F)?
+
+   A - "(name of piece) moves from (source) to (destination)"
+   B - "taking (name of captured piece)" (if there is a captured piece)
+   C - ", Check!" (if the other side is now in check) 
+   D - "Stalemate." (if other side have no valid move while not in check)
+   E - "Checkmate! (loser side) loses." (ditto, but while in check)
+   F - "(unicode visualisation of chess board)"
+
+   Also return if the game can continue or not
+*/
+bool ChessBoard::showMoveAndCheckIfGameCanContinue (Piece* piece, 
+  string sourceFileRank, Piece* capturedPiece, string destFileRank, 
+  bool isWhiteTurn, Board* board) {
+
+  printMove (piece, sourceFileRank, destFileRank);
+  if (capturedPiece != NULL) {
+    printCapture (capturedPiece);
+  }
+  if (!kingIsSafeFromRivalry (!isWhiteTurn, board)) {
+    printCheck ();
+    isInCheck = true;
+  }
+  cout << endl;
+
+  if (!playerHaveValidMove (!isWhiteTurn, board)) {
+    if (isInCheck) {
+      printCheckmate (!isWhiteTurn);
+    } else {
+      printStalemate () ;
+    }
+    printBoard (board);
+    return false;
+  }
+  return true;
+}
+
+// Obvious.
 void ChessBoard::switchPlayers() {
   isWhiteTurn = !(isWhiteTurn);
 }
 
-// deep cloning for board at map
+// Deep clone the given board - including all the Piece within the map
 Board* ChessBoard::cloneBoard (Board* board) {
   
   Board* clone = new Board;
@@ -301,7 +412,10 @@ Board* ChessBoard::cloneBoard (Board* board) {
   return clone;
 }
 
-
+/* print(Move|Capture|Check|Checkmate|Stalemate) ():
+   Print in stdout with structured as specified in comments for 
+     showMoveAndCheckIfGameCanContinue ()
+*/ 
 void ChessBoard::printMove
   (Piece* movingPiece, string sourceFileRank, string destFileRank) {
 
@@ -326,7 +440,7 @@ void ChessBoard::printStalemate () {
   cout << "Stalemate." << endl;
 }
 
-// testing (printing) the state of the chessboard
+// Printing the state of the chessboard in unicode (graphic) representation
 void ChessBoard::printBoard (Board* board) {
   cout << endl << "  +--+--+--+--+--+--+--+--+" << endl;
   for (char i = ChessInfo::MAX_RANK ; i >= ChessInfo::MIN_RANK; i--) {
