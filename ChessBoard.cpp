@@ -163,7 +163,8 @@ bool ChessBoard::gameCanContinue (string sourceFileRank, string destFileRank) {
 */
 bool ChessBoard::sourceAndDestIsValid 
   (string sourceFileRank, string destFileRank) {
-  if (sourceFileRank.length() != 2 || destFileRank.length() != 2) {
+  if (sourceFileRank.length() != ChessInfo::FILERANK_LENGTH || 
+      destFileRank.length() != ChessInfo::FILERANK_LENGTH) {
     handleInvalidMove (ChessErrHandler::INVALID_FILE_RANK,
                          piecePlaceholder, sourceFileRank, destFileRank);
     return false;

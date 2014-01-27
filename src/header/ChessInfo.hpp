@@ -9,6 +9,7 @@ class ChessInfo {
 
   public:
     static const int ZERO = 0;
+    static const unsigned int FILERANK_LENGTH = 2;
     static const int FILE_INDEX = 0;
     static const int RANK_INDEX = 1;
 
