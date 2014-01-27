@@ -9,10 +9,16 @@
 int chessBoardTest () {
   
   ChessBoard cb;
+
+  // Invalid file and rank representation
+  cb.submitMove ("A", "B");
+  cb.submitMove ("ABC", "DEF");
+  cb.submitMove ("A5H", "B6H");
  
   // Source/Dest not valid
   cb.submitMove ("J9", "H8"); 
   cb.submitMove ("A1", "H0");
+  cb.submitMove ("2D", "4D");
   
   // Empty Square
   cb.submitMove ("G3", "G4");
@@ -40,6 +46,6 @@ int main () {
   KnightTest knightTest;
   knightTest.runTest();
 
-  cout << "End of tests" << endl;
+  cout << endl << "End of tests" << endl;
   return 0;
 }

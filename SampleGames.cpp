@@ -78,4 +78,58 @@ int main () {
   cb.submitMove ("B4", "A5");
   cb.submitMove ("C2", "C4");
   cb.submitMove ("E4", "E3");
+
+  cout << endl;
+  cout << "===============================================" << endl;
+  cout << "Anderssen vs Kieseritzky (1851) - Immortal Game" << endl;
+  cout << "===============================================" << endl;
+  cout << endl;
+
+  cb.resetBoard ();
+  cb.submitMove ("E2", "E4");
+  cb.submitMove ("E7", "E5");
+  cb.submitMove ("F2", "F4");
+  cb.submitMove ("E5", "F4");
+  cb.submitMove ("F1", "C4");
+  cb.submitMove ("D8", "H4");
+  cb.submitMove ("E1", "F1");
+  cb.submitMove ("B7", "B5");
+  cb.submitMove ("C4", "B5");
+  cb.submitMove ("G8", "F6");
+  cb.submitMove ("G1", "F3");
+  cb.submitMove ("H4", "H6");
+  cb.submitMove ("D2", "D3");
+  cb.submitMove ("F6", "H5");
+  cb.submitMove ("F3", "H4");
+  cb.submitMove ("H6", "G5");
+  cb.submitMove ("H4", "F5");
+  cb.submitMove ("C7", "C6");
+  cb.submitMove ("G2", "G4");
+  cb.submitMove ("H5", "F6");
+  cb.submitMove ("H1", "G1");
+  cb.submitMove ("C6", "B5");
+  cb.submitMove ("H2", "H4");
+  cb.submitMove ("G5", "G6");
+  cb.submitMove ("H4", "H5");
+  cb.submitMove ("G6", "G5");
+  cb.submitMove ("D1", "F3");
+  cb.submitMove ("F6", "G8");
+  cb.submitMove ("C1", "F4");
+  cb.submitMove ("G5", "F6");
+  cb.submitMove ("B1", "C3");
+  cb.submitMove ("F8", "C5");
+  cb.submitMove ("C3", "D5");
+  cb.submitMove ("F6", "B2");
+  cb.submitMove ("F4", "D6");
+  cb.submitMove ("C5", "G1");
+  cb.submitMove ("E4", "E5");
+  cb.submitMove ("B2", "A1");
+  cb.submitMove ("F1", "E2");
+  cb.submitMove ("B8", "A6");
+  cb.submitMove ("F5", "G7");
+  cb.submitMove ("E8", "D8");
+  cb.submitMove ("F3", "F6");
+  cb.submitMove ("G8", "F6");
+  cb.submitMove ("D6", "E7");
+
 }

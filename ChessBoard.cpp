@@ -158,11 +158,17 @@ bool ChessBoard::gameCanContinue (string sourceFileRank, string destFileRank) {
 }
 
 /* sourceAndDestIsValid (): check if given source and dest's file and rank
-                            represenation are within chess board
+                            represenation is valid (string with 2 chars)
+                            and are within chess board
 */
 bool ChessBoard::sourceAndDestIsValid 
   (string sourceFileRank, string destFileRank) {
-
+  if (sourceFileRank.length() != 2 || destFileRank.length() != 2) {
+    handleInvalidMove (ChessErrHandler::INVALID_FILE_RANK,
+                         piecePlaceholder, sourceFileRank, destFileRank);
+    return false;
+  }
+  
   if (!withinChessBoard(sourceFileRank)) {
     handleInvalidMove (ChessErrHandler::SOURCE_OUTOF_BOUND,
                        piecePlaceholder, sourceFileRank, destFileRank);
