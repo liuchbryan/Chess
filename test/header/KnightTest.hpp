@@ -7,7 +7,6 @@
 #include "Test.hpp"
 #include "../../src/header/Knight.hpp"
 #include "../../src/header/Pawn.hpp"
-#include "../../src/header/Bishop.hpp"
 
 class KnightTest : public Test {
 
@@ -15,6 +14,13 @@ class KnightTest : public Test {
     void runTest ();
 
   private:
+    void testKnightMovesInAnyLShape ();
+    void testKnightOnlyMovesInLShape ();
+
+    void testKnightCanJumpOverOtherPieces ();
+
+    void testKnightCanCaptureEnemyPieceInDestination ();
+    void testKnightCannotMoveAndCaptureFriendlies ();
     
 };
 
