@@ -21,7 +21,6 @@ class KnightTest : public Test {
 
     void testKnightCanCaptureEnemyPieceInDestination ();
     void testKnightCannotMoveAndCaptureFriendlies ();
-    
 };
 
 #endif
