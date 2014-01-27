@@ -3,7 +3,7 @@
 
 CFLAGS = -Wall -g -c -std=c++11
 
-Test: bin/Piece.o bin/Pawn.o bin/Bishop.o bin/PawnTest.o bin/TestMain.o 
+Test: bin/Piece.o bin/Pawn.o bin/Knight.o bin/Bishop.o bin/PawnTest.o bin/KnightTest.o bin/TestMain.o 
 	g++ -Wall -g $^ -o Test
 
 bin/TestMain.o: TestMain.cpp
